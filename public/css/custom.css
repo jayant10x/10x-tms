@@ -1,0 +1,45 @@
+.custom-html-title {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.choices {
+    margin-bottom: 0 !important;
+}
+
+.validation-message {
+    color: red;
+    font-size: 14px;
+}
+
+.toast-success {
+    background: #198754;
+}
+
+.toast-error {
+    background: #dc3545;
+}
+
+.created_updated_main_div {
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+.created_updated_label {
+    font-weight: bold;
+}
+
+.created_updated {
+    color: red;
+    font-weight: 500;
+}
+
+.avatar-xl {
+    height: 10rem !important;
+    width: 10rem !important;
+}
+
+.form-label {
+    color: #242424 !important;
+    font-weight: 530 !important;
+}

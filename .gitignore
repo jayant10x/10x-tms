@@ -1,0 +1,45 @@
+# Laravel / Environment
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+
+# Laravel storage / generated files
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+
+# Dependencies
+/vendor
+/node_modules
+
+# Composer
+/auth.json
+
+# IDE / Editors
+/.idea
+/.vscode
+/.nova
+/.zed
+/.cursor
+/.codeium
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# PHPUnit
+.phpunit.cache
+
+# Laravel / local development
+Homestead.json
+Homestead.yaml
+
+# Temporary files
+*.tmp
+*.swp

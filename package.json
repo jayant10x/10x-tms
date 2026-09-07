@@ -1,0 +1,57 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.0.0",
+        "concurrently": "^10.0.3",
+        "fontaine": "^0.8.1",
+        "laravel-vite-plugin": "^3.1",
+        "sass": "^1.104.0",
+        "tailwindcss": "^4.0.0",
+        "vite": "^8.0.0"
+    },
+    "optionalDependencies": {
+        "@laravel/multiplex": "^0.4.1"
+    },
+    "dependencies": {
+        "@fullcalendar/core": "^6.1.21",
+        "@fullcalendar/daygrid": "^6.1.21",
+        "@fullcalendar/interaction": "^6.1.21",
+        "@fullcalendar/list": "^6.1.21",
+        "@fullcalendar/timegrid": "^6.1.21",
+        "@iconify/json": "^2.2.522",
+        "@popperjs/core": "^2.11.8",
+        "apexcharts": "^7.0.0",
+        "bootstrap": "^5.3.8",
+        "bootstrap-icons": "^1.13.1",
+        "boxicons": "^2.1.4",
+        "choices.js": "^11.2.4",
+        "clipboard": "^2.0.11",
+        "dropzone": "^6.0.0-beta.2",
+        "filepond": "^4.32.12",
+        "filepond-plugin-file-validate-size": "^2.2.8",
+        "filepond-plugin-file-validate-type": "^1.2.9",
+        "filepond-plugin-image-crop": "^2.0.6",
+        "filepond-plugin-image-preview": "^4.6.12",
+        "filepond-plugin-image-resize": "^2.0.10",
+        "flatpickr": "^4.6.13",
+        "gumshoejs": "^5.1.2",
+        "iconify-icon": "^3.0.2",
+        "inputmask": "^5.0.10",
+        "jquery": "^4.0.0",
+        "jsvectormap": "^1.7.0",
+        "nouislider": "^15.8.1",
+        "prismjs": "^1.30.0",
+        "quill": "^2.0.3",
+        "remixicon": "^4.9.1",
+        "simplebar": "^6.3.3",
+        "swiper": "^14.2.0",
+        "toastify-js": "^1.12.0",
+        "wnumb": "^1.2.0"
+    }
+}
