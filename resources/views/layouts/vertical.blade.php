@@ -40,7 +40,7 @@
                     'primary-id' => my_encrypt(1),
                     'mode' => my_encrypt('add', true),
                 ],
-                class: 'custom-pop-up-modal',
+                class: 'custom-pop-up-add-edit-modal',
                 title: 'Another Add Task',
                 text: 'Another Add Task',
                 ajax_btn_type: 'edit'
@@ -53,23 +53,25 @@
                     'primary-id' => my_encrypt(20),
                     'mode' => my_encrypt('edit', true),
                 ],
-                class: 'custom-pop-up-modal',
+                class: 'custom-pop-up-add-edit-modal',
                 title: 'Add Task',
                 text: 'Add Task',
             ) !!}
             {!! generate_ajax_button(
                 tooltip_title: 'Task',
                 data: [
-                    'section' => my_encrypt('hello', true),
+                    'section' => my_encrypt('hello_view', true),
                     'primary-id' => my_encrypt(20),
                     'mode' => my_encrypt('edit', true),
                 ],
-                class: 'custom-pop-up-modal',
+                class: 'custom-pop-up-view-modal',
                 title: 'View Task',
                 text: 'View Task',
                 ajax_btn_type: 'view'
             ) !!}
-            @include('layouts.partials._modal_popup')
+
+            @include('layouts.partials._modals._modal_add_edit_popup')
+            @include('layouts.partials._modals._modal_view_popup')
 
         </div>
 

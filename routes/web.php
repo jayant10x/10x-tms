@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/sub-department/{department}', [AjaxController::class, 'getSubDepartments'])->name('sub_department_by_department');
     Route::get('/employees-reporting-to', [AjaxController::class, 'getReportingToEmployees'])->name('reporting_to_employees');
     Route::get('/show-modal-popup/add-edit', [AjaxController::class, 'getAddEditPopUpForms']);
+    Route::get('/show-modal-popup/view', [AjaxController::class, 'getViewPopUpsPage']);
 
     Route::get('/notifications/{notification}/handle', [NotificationController::class, 'handle']
     )->name('notifications.handle');

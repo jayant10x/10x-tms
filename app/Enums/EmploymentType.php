@@ -2,15 +2,13 @@
 
 namespace App\Enums;
 
-enum EmploymentType: string
-{
+enum EmploymentType: string {
     case FULL_TIME = 'full_time';
     case PART_TIME = 'part_time';
     case INTERN = 'intern';
 
 
-    public function label(): string
-    {
+    public function label(): string {
         return match ($this) {
             self::FULL_TIME => 'Full Time',
             self::PART_TIME => 'Part Time',

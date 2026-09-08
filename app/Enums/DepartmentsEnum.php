@@ -2,8 +2,7 @@
 
 namespace App\Enums;
 
-enum DepartmentsEnum: string
-{
+enum DepartmentsEnum: string {
     case SALES = 'sales';
     case HR = 'hr';
     case RECRUITMENT = 'recruitment';
@@ -20,8 +19,7 @@ enum DepartmentsEnum: string
     case E_COMMERCE = 'e_commerce';
     case GRAPHICS_DESIGN = 'graphics_design';
 
-    public function label(): string
-    {
+    public function label(): string {
         return match ($this) {
             self::SALES => 'Sales',
             self::HR => 'HR',
@@ -41,8 +39,7 @@ enum DepartmentsEnum: string
         };
     }
 
-    public static function all_departments(): array
-    {
+    public static function all_departments(): array {
         return [
             self::SALES,
             self::HR,
@@ -53,24 +50,21 @@ enum DepartmentsEnum: string
         ];
     }
 
-    public static function sales_departments(): array
-    {
+    public static function sales_departments(): array {
         return [
             self::SALES_EXECUTIVE,
             self::BUSINESS_DEVELOPMENT,
         ];
     }
 
-    public static function hr_departments(): array
-    {
+    public static function hr_departments(): array {
         return [
             self::RECRUITMENT,
             self::OPERATIONS,
         ];
     }
 
-    public static function digital_marketing_departments(): array
-    {
+    public static function digital_marketing_departments(): array {
         return [
             self::PERFORMANCE_MARKETING,
             self::SEO,
@@ -81,8 +75,7 @@ enum DepartmentsEnum: string
         ];
     }
 
-    public static function get_sub_departments_by_department(self $department): array
-    {
+    public static function get_sub_departments_by_department(self $department): array {
         return match ($department) {
             self::SALES => self::sales_departments(),
 
@@ -94,8 +87,7 @@ enum DepartmentsEnum: string
         };
     }
 
-    public static function labelFrom(mixed $value): string
-    {
+    public static function labelFrom(mixed $value): string {
         return self::tryFrom($value)?->label() ?? '-';
     }
 }

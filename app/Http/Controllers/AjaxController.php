@@ -87,11 +87,36 @@ class AjaxController extends Controller {
         ]);
     }
 
+    public function getViewPopUpsPage(Request $request) {
+        $section = my_decrypt($request->section, true);
+        $mode = my_decrypt($request->mode, true);
+        $primary_id = my_decrypt($request->primary_id);
+
+        $ret_val = [
+            'data' => null,
+            'secondary_data' => null
+        ];
+        switch ($section) {
+            case 'hello_view':
+            {
+                $ret_val = $this->getTaskViewViaAjax($mode, $primary_id);
+                break;
+            }
+        }
+        return response()->json([
+            'data' => $ret_val['data'],
+            'secondary_data' => $ret_val['secondary_data'],
+        ]);
+    }
+
     private function getCreateTaskFormViaAjax($mode, $primary_id) {
         return ['data' => '<h1>Hello Comes from Ajax Controller.</h1>', 'secondary_data' => 'Create Task'];
     }
 
     private function getAnotherCreateTaskFormViaAjax($mode, $primary_id) {
         return ['data' => '<h1>Another Hello Comes from Ajax Controller.</h1>', 'secondary_data' => 'Another Create Task'];
+    }
+    private function getTaskViewViaAjax($mode, $primary_id) {
+        return ['data' => '<h1>Task View Comes from Ajax Controller.</h1>', 'secondary_data' => 'View Task'];
     }
 }
