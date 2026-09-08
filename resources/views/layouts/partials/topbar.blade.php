@@ -11,12 +11,12 @@
                     </div>
 
                     <!-- App Search-->
-                    <form class="app-search d-none d-md-block me-auto">
+                    {{--<form class="app-search d-none d-md-block me-auto">
                          <div class="position-relative">
                               <input type="search" class="form-control border-0" placeholder="Search..." autocomplete="off" value="">
                               <i class="ri-search-line search-widget-icon"></i>
                          </div>
-                    </form>
+                    </form>--}}
                </div>
 
                <div class="d-flex align-items-center gap-1">

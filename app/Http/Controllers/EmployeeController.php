@@ -26,7 +26,7 @@ class EmployeeController extends Controller {
         $request->validate([
             'emp_id' => 'required|unique:employees,emp_internal_id',
             'full_name' => 'required|min:' . MIN_LENGTH . '|max:' . MAX_LENGTH_100,
-            'phone_number' => 'required|numeric',
+            'phone_number' => 'required|min:' . MIN_LENGTH_10 . '|max:' . MAX_LENGTH_20,
             'email' => 'required|email|unique:employees,emp_email',
             'employment_type' => 'required',
             'designation' => 'required',
@@ -101,31 +101,28 @@ class EmployeeController extends Controller {
     }
 
     public function update(Request $request, $emp_id) {
+        $emp_id = my_decrypt($emp_id);
+
+        $request->validate([
+            'emp_id' => ['required',
+                Rule::unique('employees', 'emp_internal_id')->ignore($emp_id, 'emp_id'),
+            ],
+            'full_name' => 'required|min:' . MIN_LENGTH . '|max:' . MAX_LENGTH_100,
+            'phone_number' => 'required|min:' . MIN_LENGTH_10 . '|max:' . MAX_LENGTH_20,
+            'email' => ['required', 'email',
+                Rule::unique('employees', 'emp_email')->ignore($emp_id, 'emp_id'),
+            ],
+            'employment_type' => 'required',
+            'designation' => 'required',
+            'department' => 'required',
+            'sub_department' => 'nullable',
+            'reporting_to' => 'nullable',
+            'joining_date' => 'required|date',
+            'status' => 'required',
+            'employee_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+        ]);
+
         try {
-            $emp_id = my_decrypt($emp_id);
-
-            $request->validate([
-                'emp_id' => [
-                    'required',
-                    Rule::unique('employees', 'emp_internal_id')->ignore($emp_id, 'emp_id'),
-                ],
-                'full_name' => 'required|min:' . MIN_LENGTH . '|max:' . MAX_LENGTH_100,
-                'phone_number' => 'required|numeric',
-                'email' => [
-                    'required',
-                    'email',
-                    Rule::unique('employees', 'emp_email')->ignore($emp_id, 'emp_id'),
-                ],
-                'employment_type' => 'required',
-                'designation' => 'required',
-                'department' => 'required',
-                'sub_department' => 'nullable',
-                'reporting_to' => 'nullable',
-                'joining_date' => 'required|date',
-                'status' => 'required',
-                'employee_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
-            ]);
-
             DB::transaction(function () use ($request, $emp_id) {
                 $current_date = date(config('constants.DB_DATE_TIME_FORMAT'));
                 $employee = Employee::where('emp_id', $emp_id)->firstOrFail();
@@ -161,9 +158,7 @@ class EmployeeController extends Controller {
                     $file->storeAs('employees', $filename, 'public');
                 } else {
                     if (!empty($employee->emp_photo)) {
-                        Storage::disk('public')->delete(
-                            'employees/' . $employee->emp_photo
-                        );
+                        Storage::disk('public')->delete('employees/' . $employee->emp_photo);
                     }
                     $employee->emp_photo = null;
                 }
@@ -172,8 +167,13 @@ class EmployeeController extends Controller {
 
             return redirect()->back()->with('success', 'Employee updated successfully.');
 
-        } catch (\Exception $e) {
-            dd($e->getMessage());
+        } catch (\Throwable $e) {
+            \Log::error('Employee update failed', [
+                'emp_id' => $emp_id,
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
             return redirect()->back()->with('error', 'Something went wrong.');
         }
     }
