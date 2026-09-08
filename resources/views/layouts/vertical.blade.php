@@ -33,6 +33,29 @@
 
             @yield('content')
 
+            {!! generate_ajax_button(
+                 data: [
+                    'section' => my_encrypt('another_hello', true),
+                    'primary-id' => my_encrypt(1),
+                    'mode' => my_encrypt('add', true),
+                ],
+                class: 'custom-pop-up-modal',
+                title: 'Another Add Task',
+                text: 'Another Add Task'
+            ) !!}
+
+            {!! generate_ajax_button(
+                data: [
+                    'section' => my_encrypt('hello', true),
+                    'primary-id' => my_encrypt(20),
+                    'mode' => my_encrypt('edit', true),
+                ],
+                class: 'custom-pop-up-modal',
+                title: 'Add Task',
+                text: 'Add Task'
+            ) !!}
+            @include('layouts.partials._modal_popup')
+
         </div>
 
         @include("layouts.partials/footer")

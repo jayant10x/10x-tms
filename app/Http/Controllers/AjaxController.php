@@ -59,4 +59,39 @@ class AjaxController extends Controller {
             'message' => 'Reporting to ' . $department . ' For Department ' . $sub_department,
         ]);
     }
+
+    public function getAddEditPopUpForms(Request $request) {
+        $section = my_decrypt($request->section, true);
+        $mode = my_decrypt($request->mode, true);
+        $primary_id = my_decrypt($request->primary_id);
+
+        $ret_val = [
+            'data' => null,
+            'secondary_data' => null
+        ];
+        switch ($section) {
+            case 'hello':
+            {
+                $ret_val = $this->getCreateTaskFormViaAjax($mode, $primary_id);
+                break;
+            }
+            case 'another_hello':
+            {
+                $ret_val = $this->getAnotherCreateTaskFormViaAjax($mode, $primary_id);
+                break;
+            }
+        }
+        return response()->json([
+            'data' => $ret_val['data'],
+            'secondary_data' => $ret_val['secondary_data'],
+        ]);
+    }
+
+    private function getCreateTaskFormViaAjax($mode, $primary_id) {
+        return ['data' => '<h1>Hello Comes from Ajax Controller.</h1>', 'secondary_data' => 'Create Task'];
+    }
+
+    private function getAnotherCreateTaskFormViaAjax($mode, $primary_id) {
+        return ['data' => '<h1>Another Hello Comes from Ajax Controller.</h1>', 'secondary_data' => 'Another Create Task'];
+    }
 }

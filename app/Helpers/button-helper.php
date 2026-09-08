@@ -1,48 +1,41 @@
 <?php
 if (!function_exists('generate_view_button')) {
-    function generate_view_button(string $url, string $class = '', string $text = ''): string
-    {
+    function generate_view_button(string $url, string $class = '', string $text = ''): string {
         return sprintf(config('buttons.view'), $url, $class, $text);
     }
 }
 
 if (!function_exists('generate_edit_button')) {
-    function generate_edit_button(string $url, string $class = '', string $text = ''): string
-    {
+    function generate_edit_button(string $url, string $class = '', string $text = ''): string {
         return sprintf(config('buttons.edit'), $url, $class, $text);
     }
 }
 
 if (!function_exists('generate_delete_button')) {
-    function generate_delete_button(string $url, string $class = '', string $text = ''): string
-    {
+    function generate_delete_button(string $url, string $class = '', string $text = ''): string {
         return sprintf(config('buttons.delete'), $url, $class, $text);
     }
 }
 
 if (!function_exists('generate_back_to_list_button')) {
-    function generate_back_to_list_button(string $url, string $class = '', string $text = ''): string
-    {
+    function generate_back_to_list_button(string $url, string $class = '', string $text = ''): string {
         return sprintf(config('buttons.back_to_list'), $url, $class, $text);
     }
 }
 if (!function_exists('generate_back_to_list_button')) {
-    function generate_back_to_list_button(string $url, string $class = '', string $text = ''): string
-    {
+    function generate_back_to_list_button(string $url, string $class = '', string $text = ''): string {
         return sprintf(config('buttons.back_to_list'), $url, $class, $text);
     }
 }
 
 if (!function_exists('generate_add_button')) {
-    function generate_add_button(string $url, string $class = '', string $title = '', string $text = ''): string
-    {
+    function generate_add_button(string $url, string $class = '', string $title = '', string $text = ''): string {
         return sprintf(config('buttons.add_new'), $url, $class, $title, $text);
     }
 }
 
 if (!function_exists('generate_submit_reset_button')) {
-    function generate_submit_reset_button(): string
-    {
+    function generate_submit_reset_button(): string {
         return '<div class="mb-3 rounded">
                 <div class="row justify-content-start g-2">
                 <div class="col-md-2">' .
@@ -50,4 +43,11 @@ if (!function_exists('generate_submit_reset_button')) {
             . '
                 </div></div></div>';
     }
+}
+function generate_ajax_button(array $data,string $class, string $title, string $text, string $ajax_btn_type = 'add'): string {
+    $attributes = '';
+    foreach ($data as $key => $value) {
+        $attributes .= 'data-bs-' . $key . '="' . e($value) . '" ';
+    }
+    return sprintf(config('buttons.add_ajax_btn'), $attributes, $class, $title, $text);
 }

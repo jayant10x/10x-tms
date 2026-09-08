@@ -692,3 +692,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
         className: type === 'success' ? 'toast-success' : 'toast-error',
     }).showToast();
 };*/
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+    // Initialize Popovers (including inside modals)
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+    [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {
+        container: 'body' // Keeps popover correctly placed relative to the modal
+    }));
+});

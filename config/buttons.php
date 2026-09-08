@@ -16,4 +16,7 @@ return [
     'submit_btn' => '<button type="submit" class="btn btn-outline-primary w-100"><iconify-icon icon="solar:archive-minimalistic-line-duotone" class="align-middle fs-18"></iconify-icon> Save</button>',
 
     'reset_btn' => '<button type="reset" class="btn btn-outline-danger w-100"><iconify-icon icon="solar:restart-bold-duotone" class="align-middle fs-18"></iconify-icon> Reset</button>',
+
+    'add_ajax_btn' => '<button type="button" %s class="btn btn-primary %s" data-bs-title="%s" data-bs-toggle="modal" data-bs-target="#addEditModalPopup">
+    <iconify-icon icon="solar:restart-bold-duotone" class="align-middle fs-18"></iconify-icon>%s</button>',
 ];
