@@ -34,6 +34,7 @@
             @yield('content')
 
             {!! generate_ajax_button(
+                 tooltip_title: 'Another Task',
                  data: [
                     'section' => my_encrypt('another_hello', true),
                     'primary-id' => my_encrypt(1),
@@ -41,10 +42,12 @@
                 ],
                 class: 'custom-pop-up-modal',
                 title: 'Another Add Task',
-                text: 'Another Add Task'
+                text: 'Another Add Task',
+                ajax_btn_type: 'edit'
             ) !!}
 
             {!! generate_ajax_button(
+                tooltip_title: 'Task',
                 data: [
                     'section' => my_encrypt('hello', true),
                     'primary-id' => my_encrypt(20),
@@ -52,7 +55,19 @@
                 ],
                 class: 'custom-pop-up-modal',
                 title: 'Add Task',
-                text: 'Add Task'
+                text: 'Add Task',
+            ) !!}
+            {!! generate_ajax_button(
+                tooltip_title: 'Task',
+                data: [
+                    'section' => my_encrypt('hello', true),
+                    'primary-id' => my_encrypt(20),
+                    'mode' => my_encrypt('edit', true),
+                ],
+                class: 'custom-pop-up-modal',
+                title: 'View Task',
+                text: 'View Task',
+                ajax_btn_type: 'view'
             ) !!}
             @include('layouts.partials._modal_popup')
 

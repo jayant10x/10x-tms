@@ -25,9 +25,9 @@
 --}}
 
 <div class="modal fade"
-     id="addEditModalPopup"
+     id="addEditViewModalPopup"
      tabindex="-1"
-     aria-labelledby="addEditModalPopupLabel"
+     aria-labelledby="addEditViewModalPopupLabel"
      aria-hidden="true"
      data-bs-backdrop="static"
      data-bs-keyboard="false">

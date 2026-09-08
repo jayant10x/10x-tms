@@ -44,10 +44,33 @@ if (!function_exists('generate_submit_reset_button')) {
                 </div></div></div>';
     }
 }
-function generate_ajax_button(array $data,string $class, string $title, string $text, string $ajax_btn_type = 'add'): string {
+function generate_ajax_button(
+    string $tooltip_title,
+    array  $data,
+    string $class,
+    string $title,
+    string $text,
+    string $ajax_btn_type = 'add'
+): string {
     $attributes = '';
+
     foreach ($data as $key => $value) {
-        $attributes .= 'data-bs-' . $key . '="' . e($value) . '" ';
+        if (in_array(strtolower($key), ['toggle', 'target', 'backdrop', 'modal'])) {
+            continue;
+        }
+        $attributes .= 'data-bs-' . e($key) . '="' . e($value) . '" ';
     }
-    return sprintf(config('buttons.add_ajax_btn'), $attributes, $class, $title, $text);
+    $attributes = trim($attributes);
+
+    $configKey = "buttons.{$ajax_btn_type}_ajax_btn";
+    $template = config($configKey, config('buttons.add_ajax_btn'));
+
+    return sprintf(
+        $template,
+        e($tooltip_title), // %1$s -> Outer span tooltip title
+        $attributes,       // %2$s -> Extra data-bs-* attributes on button
+        e($class),         // %3$s -> Extra CSS classes
+        e($title),         // %4$s -> Modal title
+        e($text)           // %5$s -> Button inner text
+    );
 }

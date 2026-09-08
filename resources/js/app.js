@@ -694,8 +694,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
 };*/
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Tooltips
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]:not([data-bs-toggle="modal"])');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
     // Initialize Popovers (including inside modals)
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');

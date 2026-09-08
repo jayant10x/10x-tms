@@ -59,7 +59,7 @@ $(document).ready(function () {
         const primaryId = button.attr('data-bs-primary-id');
         const mode = button.attr('data-bs-mode');
 
-        const modal = $('#addEditModalPopup');
+        const modal = $('#addEditViewModalPopup');
 
         // Reset modal
         modal.find('.modal-generic-title').text('Loading...');
