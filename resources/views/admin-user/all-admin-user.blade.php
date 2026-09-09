@@ -41,7 +41,7 @@
                                                              class="avatar-sm rounded-circle">
                                                     @endif
                                                 </div>
-                                                <div class="text-dark fw-medium fs-15">
+                                                <div class="text-dark fw-medium">
                                                     {{$user->adm_name}}
                                                 </div>
                                             </div>

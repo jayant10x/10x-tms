@@ -56,10 +56,10 @@ function get_date_time_format($datetime, $format = null) {
 function generate_status_html($status) {
     switch ($status) {
         case 0:
-            return '<span class="badge badge-soft-danger rounded-pill me-1 fs-5">Inactive</span>';
+            return '<span class="badge badge-soft-danger rounded-pill me-1 fs-6">Inactive</span>';
         case 1:
         default:
-            return '<span class="badge badge-soft-success rounded-pill me-1 fs-5">Active</span>';
+            return '<span class="badge badge-soft-success rounded-pill me-1 fs-6">Active</span>';
 
     }
 }
