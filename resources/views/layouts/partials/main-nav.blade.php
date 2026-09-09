@@ -47,6 +47,22 @@
                       <span class="nav-text">Admin User</span>
                   </a>
               </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('team_members.list')}}">
+                         <span class="nav-icon">
+                              <i class="ri-team-line"></i>
+                         </span>
+                      <span class="nav-text">Team Members</span>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('projects.list')}}">
+                         <span class="nav-icon">
+                              <i class="ri-briefcase-2-line"></i>
+                         </span>
+                      <span class="nav-text">Projects</span>
+                  </a>
+              </li>
 
                {{--<li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarProperty" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProperty">

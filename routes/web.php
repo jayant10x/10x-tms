@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TeamMembersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,7 +55,6 @@ Route::middleware('auth')->group(function () {
     Route::get('employees/edit/{emp_id}', [EmployeeController::class, 'edit'])->name('employees.edit');
     Route::put('employees/update/{emp_id}', [EmployeeController::class, 'update'])->name('employees.update');
 
-
     Route::get('/my-profile', [MyProfileController::class, 'viewProfile'])->name('my_profile');
     Route::get('/my-profile/edit', [MyProfileController::class, 'editProfile'])->name('my_profile.edit');
     Route::put('/my-profile/update/personal-info', [MyProfileController::class, 'updateProfilePersonalInfo'])->name('my_profile.update.personal_info');
@@ -66,4 +67,11 @@ Route::middleware('auth')->group(function () {
     Route::get('admin-user/edit/{adm_id}', [AdminUserController::class, 'editAdmin'])->name('admin_user_module.edit');
     Route::put('admin-user/update-admin/{adm_id}', [AdminUserController::class, 'updateAdmin'])->name('admin_user_module.update');
     Route::get('admin-user/view-admin/{adm_id}', [AdminUserController::class, 'viewAdmin'])->name('admin_user_module.view');
+
+    Route::get('team-members', [TeamMembersController::class, 'index'])->name('team_members.list');
+
+    Route::get('projects/', [ProjectController::class, 'index'])->name('projects.list');
+    Route::get('projects/add', [ProjectController::class, 'addProject'])->name('projects.add');
+    Route::post('projects/save', [ProjectController::class, 'saveProject'])->name('projects.save');
+    Route::get('projects/view/{pro_id}', [ProjectController::class, 'viewProject'])->name('project.view');
 });

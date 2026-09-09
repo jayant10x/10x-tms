@@ -17,9 +17,9 @@ return [
 
     'reset_btn' => '<button type="reset" class="btn btn-outline-danger w-100"><iconify-icon icon="solar:restart-bold-duotone" class="align-middle fs-18"></iconify-icon> Reset</button>',
 
-    'add_ajax_btn' => '<span data-bs-toggle="tooltip" data-bs-title="Add %1$s"><button type="button" %2$s class="btn btn-soft-primary btn-sm %3$s" data-bs-title="%4$s" data-bs-toggle="modal" data-bs-target="#addEditModalPopup"><iconify-icon icon="solar:add-broken" class="align-middle fs-18"></iconify-icon> %5$s</button></span>',
+    'add_ajax_btn' => '<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add %1$s"><button type="button" %2$s class="btn btn-soft-primary btn-sm %3$s" data-bs-title="%4$s" data-bs-toggle="modal" data-bs-target="#addEditModalPopup"><iconify-icon icon="solar:add-broken" class="align-middle fs-18"></iconify-icon> %5$s</button></span>',
 
-    'edit_ajax_btn' => '<span data-bs-toggle="tooltip" data-bs-title="Edit %1$s"><button type="button" %2$s class="btn btn-soft-primary btn-sm %3$s" data-bs-title="%4$s" data-bs-toggle="modal" data-bs-target="#addEditModalPopup"><iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon> %5$s</button></span>',
+    'edit_ajax_btn' => '<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit %1$s"><button type="button" %2$s class="btn btn-soft-primary btn-sm %3$s" data-bs-title="%4$s" data-bs-toggle="modal" data-bs-target="#addEditModalPopup"><iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon> %5$s</button></span>',
 
-    'view_ajax_btn' => '<span data-bs-toggle="tooltip" data-bs-title="View %1$s"><button type="button" %2$s class="btn btn-soft-warning btn-sm %3$s" data-bs-title="%4$s" data-bs-toggle="modal" data-bs-target="#viewModalPopup"><iconify-icon icon="solar:eye-broken" class="align-middle fs-18"></iconify-icon> %5$s</button></span>',
+    'view_ajax_btn' => '<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View %1$s"><button type="button" %2$s class="btn btn-soft-warning btn-sm %3$s" data-bs-title="%4$s" data-bs-toggle="modal" data-bs-target="#viewModalPopup"><iconify-icon icon="solar:eye-broken" class="align-middle fs-18"></iconify-icon> %5$s</button></span>',
 ];

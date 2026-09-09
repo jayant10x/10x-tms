@@ -211,6 +211,9 @@ return [
         'status' => 'Status',
         'emp_id' => 'Employee ID',
         'reporting_to' => 'Reporting To',
+        'project_name' => 'Project Name',
+        'project_desc' => 'Description',
+        'project_deadline' => 'Deadline',
     ],
 
 ];

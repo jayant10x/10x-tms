@@ -101,3 +101,15 @@ function generate_created_updated_label($created_updated_data): string {
                 </div>
             </div>';
 }
+
+function generate_shorten_string($text, $char_length = 25) {
+    if (mb_strlen($text) <= $char_length) {
+        return $text;
+    }
+    return mb_substr($text, 0, $char_length) . '...';
+}
+
+function get_initials_char(string $text, $returned_limit = 2): string {
+    $words = preg_split('/\s+/', trim($text));
+    return collect($words)->filter()->take($returned_limit)->map(fn($word) => strtoupper(mb_substr($word, 0, 1)))->implode('');
+}

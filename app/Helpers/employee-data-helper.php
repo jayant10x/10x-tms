@@ -11,6 +11,9 @@ function get_logged_in_user_employee_data() {
     return Employee::find(Auth::user()->adm_emp_id);
 }
 
+function get_employee_data($emp_id) {
+    return Employee::find($emp_id);
+}
 function get_logged_in_user_id() {
     return Auth::id();
 }

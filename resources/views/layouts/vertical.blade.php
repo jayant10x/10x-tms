@@ -33,7 +33,7 @@
 
             @yield('content')
 
-            {!! generate_ajax_button(
+            {{--{!! generate_ajax_button(
                  tooltip_title: 'Another Task',
                  data: [
                     'section' => my_encrypt('another_hello', true),
@@ -68,7 +68,7 @@
                 title: 'View Task',
                 text: 'View Task',
                 ajax_btn_type: 'view'
-            ) !!}
+            ) !!}--}}
 
             @include('layouts.partials._modals._modal_add_edit_popup')
             @include('layouts.partials._modals._modal_view_popup')
