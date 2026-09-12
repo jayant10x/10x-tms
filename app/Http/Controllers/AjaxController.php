@@ -63,16 +63,16 @@ class AjaxController extends Controller {
     public function getAddEditPopUpForms(Request $request) {
         $section = my_decrypt($request->section, true);
         $mode = my_decrypt($request->mode, true);
-        $primary_id = my_decrypt($request->primary_id);
+        $primary_id = isset($request->primary_id) ? my_decrypt($request->primary_id) : null;
 
         $ret_val = [
             'data' => null,
             'secondary_data' => null
         ];
         switch ($section) {
-            case 'hello':
+            case 'create-task':
             {
-                $ret_val = $this->getCreateTaskFormViaAjax($mode, $primary_id);
+                $ret_val = $this->getCreateTaskFormViaAjax($mode);
                 break;
             }
             case 'another_hello':
@@ -109,13 +109,19 @@ class AjaxController extends Controller {
         ]);
     }
 
-    private function getCreateTaskFormViaAjax($mode, $primary_id) {
-        return ['data' => '<h1>Hello Comes from Ajax Controller.</h1>', 'secondary_data' => 'Create Task'];
+    private function getCreateTaskFormViaAjax($mode) {
+        if ($mode == 'add') {
+            $data = view('project-task.add-project-task')->render();
+        } else {
+            $data = '';
+        }
+        return ['data' => $data, 'secondary_data' => 'Create Task'];
     }
 
     private function getAnotherCreateTaskFormViaAjax($mode, $primary_id) {
         return ['data' => '<h1>Another Hello Comes from Ajax Controller.</h1>', 'secondary_data' => 'Another Create Task'];
     }
+
     private function getTaskViewViaAjax($mode, $primary_id) {
         return ['data' => '<h1>Task View Comes from Ajax Controller.</h1>', 'secondary_data' => 'View Task'];
     }

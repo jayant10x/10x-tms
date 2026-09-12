@@ -11,7 +11,7 @@
                     @if(!empty($all_users) && count($all_users) > 0)
                         <div class="table-responsive">
                             <table class="table align-middle text-nowrap table-hover table-centered mb-0">
-                                <thead class="bg-light-subtle">
+                                <thead class="table-light">
                                 <tr>
                                     <th width="5%">Sr. no.</th>
                                     <th width="20%">Admin Photo & Name</th>

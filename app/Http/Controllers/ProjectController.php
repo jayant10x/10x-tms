@@ -23,7 +23,13 @@ class ProjectController extends Controller {
     }
 
     public function viewProject($pro_id) {
-        dd($pro_id);
+        $pro_id = my_decrypt($pro_id);
+        $project_manager = [];
+        $project_data = Project::query()->where('pro_id', '=', $pro_id)->first()->toArray();
+        if (!empty($project_data['pro_manager'])) {
+            $project_manager = get_employee_data($project_data['pro_manager']);
+        }
+        return view('projects.view-project', compact('project_data', 'project_manager', 'pro_id'));
     }
 
     public function saveProject(Request $request) {

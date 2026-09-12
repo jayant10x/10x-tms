@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-6">
         <p class="text-dark fw-semibold fs-16 mb-0">Role :</p>
-        <p class="mb-0">{{config('constants.ROLES')[$emp_data->admin_user_details->adm_role]}}</p>
+        <p class="mb-0">{!! \App\Enums\UserRoleEnum::tryFrom($emp_data->admin_user_details->adm_role)->badge() !!}</p>
     </div>
 </div>
 {!! generate_created_updated_label($emp_data->admin_user_details) !!}

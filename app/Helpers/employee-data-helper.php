@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Employee;
+use App\Services\PermissionService;
 use Illuminate\Support\Facades\Auth;
 
 function get_logged_in_user_employee_data() {
@@ -14,6 +15,7 @@ function get_logged_in_user_employee_data() {
 function get_employee_data($emp_id) {
     return Employee::find($emp_id);
 }
+
 function get_logged_in_user_id() {
     return Auth::id();
 }
@@ -58,7 +60,11 @@ function get_logged_in_user_emp_profile_pic() {
 }
 
 function is_admin() {
-    return Auth::user()->adm_role == 'admin';
+    return get_logged_in_user_role() == 'admin';
+}
+
+function get_logged_in_user_role() {
+    return Auth::user()?->adm_role;
 }
 
 if (!function_exists('getEmployeeChildren')) {
@@ -72,7 +78,7 @@ if (!function_exists('getEmployeeChildren')) {
      * @return array
      */
     function get_employee_children_in_depth(int $employeeId, bool $onlyIds = false, ?int $depth = 1): array {
-        $employees = Employee::query()->select('emp_id', 'emp_full_name', 'emp_reporting_to')->get()->groupBy('emp_reporting_to');
+        $employees = Employee::query()->select('emp_id', 'emp_internal_id', 'emp_full_name', 'emp_email', 'emp_designation', 'emp_department', 'emp_sub_department', 'emp_joining_date', 'emp_status', 'emp_photo', 'emp_reporting_to')->get()->groupBy('emp_reporting_to');
         $result = [];
         $findChildren = function (int $parentId, int $currentDepth) use (&$findChildren, &$result, $employees, $onlyIds, $depth) {
             // Stop when depth limit is reached
@@ -87,5 +93,63 @@ if (!function_exists('getEmployeeChildren')) {
         };
         $findChildren($employeeId, 1);
         return $result;
+    }
+}
+
+if (!function_exists('permission_service')) {
+    function permission_service(): PermissionService {
+        return app(PermissionService::class);
+    }
+}
+
+
+if (!function_exists('get_all_permissions')) {
+    function get_all_permissions(): array {
+        return permission_service()->all();
+    }
+}
+
+
+if (!function_exists('permission')) {
+    function permission(string $module, ?string $action = null): bool {
+        if ($action === null) {
+            return permission_service()->hasModule($module);
+        }
+        return permission_service()->can($module, $action);
+    }
+}
+
+
+if (!function_exists('permission_can')) {
+    function permission_can(string $module, string $action): bool {
+        return permission_service()->can($module, $action);
+    }
+}
+
+
+if (!function_exists('permission_route')) {
+    function permission_route(string $module, array  $parameters = [], bool   $absolute = true): ?string {
+        return permission_service()->route($module, $parameters, $absolute);
+    }
+}
+
+
+if (!function_exists('permission_route_name')) {
+    function permission_route_name(string $module): ?string {
+        return permission_service()->routeName($module);
+    }
+}
+
+
+if (!function_exists('permission_module')) {
+    function permission_module(string $module): ?array {
+        return permission_service()->module($module);
+    }
+}
+
+
+if (!function_exists('logged_in_user_role')) {
+    function logged_in_user_role(): ?string {
+        return permission_service()->role();
     }
 }

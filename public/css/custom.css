@@ -43,3 +43,36 @@
     color: #242424 !important;
     font-weight: 530 !important;
 }
+
+.stat-purple {
+    background: #e6dfff;
+}
+
+.stat-green {
+    background: #d9f5e8;
+}
+
+.stat-yellow {
+    background: #fff0c9;
+}
+
+.stat-pink {
+    background: #fde0e9;
+}
+
+/* Soft badges */
+.badge-soft-purple {
+    background-color: #e9e3ff;
+    color: #6246e5 !important;
+}
+
+/* Outline badges */
+.badge-outline-purple {
+    border: 1px solid #cfc3ff;
+}
+
+.designation-badge {
+    background: #2c7ac8;
+    color: #ffffff;
+    border: 1px solid #818285;
+}

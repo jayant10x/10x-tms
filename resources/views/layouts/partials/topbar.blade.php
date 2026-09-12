@@ -1,13 +1,13 @@
 <header class="">
-     <div class="topbar">
-     <div class="container-fluid">
-          <div class="navbar-header">
-               <div class="d-flex align-items-center gap-2">
+    <div class="topbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="d-flex align-items-center gap-2">
                     <!-- Menu Toggle Button -->
                     <div class="topbar-item">
-                         <button type="button" class="button-toggle-menu topbar-button">
-                              <i class="ri-menu-2-line fs-24"></i>
-                         </button>
+                        <button type="button" class="button-toggle-menu topbar-button">
+                            <i class="ri-menu-2-line fs-24"></i>
+                        </button>
                     </div>
 
                     <!-- App Search-->
@@ -17,9 +17,9 @@
                               <i class="ri-search-line search-widget-icon"></i>
                          </div>
                     </form>--}}
-               </div>
+                </div>
 
-               <div class="d-flex align-items-center gap-1">
+                <div class="d-flex align-items-center gap-1">
                     <!-- Theme Color (Light/Dark) -->
                     {{--<div class="topbar-item">
                          <button type="button" class="topbar-button" id="light-dark-mode">
@@ -143,22 +143,37 @@
                          </button>
                     </div>
 --}}
+                    @if(get_logged_in_user_role() == 'manager')
+                        <div class="topbar-item d-none d-md-flex">
+                            {!! generate_ajax_button(
+                                tooltip_title: 'Create Task',
+                                data: [
+                                    'section' => my_encrypt('create-task', true),
+                                    'mode' => my_encrypt('add', true),
+                                ],
+                                class: 'custom-pop-up-add-edit-modal',
+                                title: 'Create Task',
+                                text: 'Create Task',
+                            ) !!}
+                        </div>
+                    @endif
                     <!-- User -->
                     <div class="dropdown topbar-item">
-                         <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                             @php
-                                 $profile_pic = asset('images/users/dummy-avatar.jpg');
-                                 if(!empty(get_logged_in_user_emp_profile_pic())) {
-                                     $profile_pic = asset('storage/employees/'. get_logged_in_user_emp_profile_pic());
-                                 }
-                                 if(is_admin() && !empty(Auth::user()?->adm_photo)) {
-                                     $profile_pic = asset('storage/admin/'. Auth::user()?->adm_photo);
-                                 }
-                             @endphp
-                             <span class="d-flex align-items-center">
+                        <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            @php
+                                $profile_pic = asset('images/users/dummy-avatar.jpg');
+                                if(!empty(get_logged_in_user_emp_profile_pic())) {
+                                    $profile_pic = asset('storage/employees/'. get_logged_in_user_emp_profile_pic());
+                                }
+                                if(is_admin() && !empty(Auth::user()?->adm_photo)) {
+                                    $profile_pic = asset('storage/admin/'. Auth::user()?->adm_photo);
+                                }
+                            @endphp
+                            <span class="d-flex align-items-center">
                                    <img class="rounded-circle" width="32" height="32" src="{{$profile_pic}}">
                               </span>
-                         </a>
+                        </a>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
                             <h6 class="dropdown-header">Welcome {{get_logged_in_adm_name()}}!</h6>
@@ -182,11 +197,14 @@
                             <div class="dropdown-divider my-1"></div>
 
                             <a class="dropdown-item text-danger" href="{{ route('logout')}}">
-                                   <iconify-icon icon="solar:logout-3-broken" class="align-middle me-2 fs-18"></iconify-icon><span class="align-middle">Logout</span>
-                              </a>
-                         </div>
+                                <iconify-icon icon="solar:logout-3-broken"
+                                              class="align-middle me-2 fs-18"></iconify-icon>
+                                <span class="align-middle">Logout</span>
+                            </a>
+                        </div>
                     </div>
-               </div>
-          </div>
-     </div></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>

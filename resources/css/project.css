@@ -1,0 +1,97 @@
+.project-first-char-count {
+    padding: 12px;
+    text-align: center;
+    border-radius: 9px;
+    font-size: larger;
+    font-weight: 700;
+    color: white;
+}
+
+.progress-card {
+    border: 1px solid #d3e8ff !important;
+    border-radius: 10px !important;
+    padding: 20px -10px !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
+}
+
+.team-members-card {
+    background: #e3f1fd !important;
+    border: 1px solid #a6d6ff !important;
+    box-shadow: rgb(163 190 216) 1.95px 1.95px 2.6px !important;
+}
+
+.team-member-role-pill {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+/* =========================
+   SUMMARY CARDS
+========================= */
+
+.mini-card {
+    border: 0;
+    border-radius: 18px;
+    padding: 18px;
+    min-height: 130px;
+    position: relative;
+    overflow: hidden;
+    transition: .2s;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.mini-card:hover {
+    transform: translateY(-3px);
+}
+
+.mini-card::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    right: -20px;
+    bottom: -30px;
+    background: rgba(255, 255, 255, .3);
+}
+
+.card-purple {
+    background: #e9e4ff;
+}
+
+.card-pink {
+    background: #ffe2eb;
+}
+
+.card-yellow {
+    background: #fff1c9;
+}
+
+.card-green {
+    background: #dcf8eb;
+}
+
+.mini-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.mini-number {
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.mini-label {
+    font-size: 12px;
+    color: #707078;
+    margin-top: 5px;
+}

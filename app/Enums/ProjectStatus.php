@@ -28,6 +28,6 @@ enum ProjectStatus: string {
     }
 
     public function badge(): string {
-        return '<span class="badge rounded-pill me-1 fs-6 badge-soft-' . $this->color() . '">' . $this->label() . '</span>';
+        return '<span class="badge rounded-pill badge-outline-'. $this->color().' me-1 fs-6 badge-soft-' . $this->color() . '">' . $this->label() . '</span>';
     }
 }

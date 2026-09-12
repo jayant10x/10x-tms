@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\PermissionService;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Services\EncryptionService;
 
@@ -25,5 +27,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+
+        View::composer('*', function ($view) {
+            $view->with(
+                'logged_in_user_permissions',
+                app(PermissionService::class)->all()
+            );
+        });
     }
 }

@@ -19,7 +19,7 @@
                         </div>
                         <div class="col-lg-6 my-1">
                             <p class="text-dark fw-semibold fs-16 mb-0">Role :</p>
-                            <p class="mb-0">{{config('constants.ROLES')[$admin_data->adm_role]}}</p>
+                            <p class="mb-0">{!! \App\Enums\UserRoleEnum::tryFrom($admin_data->adm_role)->badge() !!}</p>
                         </div>
                         <div class="col-lg-6 my-1">
                             <p class="text-dark fw-semibold fs-16 mb-0">Status :</p>

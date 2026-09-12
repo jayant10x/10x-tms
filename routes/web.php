@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('admin-user/view-admin/{adm_id}', [AdminUserController::class, 'viewAdmin'])->name('admin_user_module.view');
 
     Route::get('team-members', [TeamMembersController::class, 'index'])->name('team_members.list');
+    Route::get('team-member/view/{called_from}/{member_id}/{pro_id?}', [TeamMembersController::class, 'viewTeamMember'])->name('team_member.view');
 
     Route::get('projects/', [ProjectController::class, 'index'])->name('projects.list');
     Route::get('projects/add', [ProjectController::class, 'addProject'])->name('projects.add');
