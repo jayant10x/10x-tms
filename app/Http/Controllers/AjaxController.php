@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\DepartmentsEnum;
 use App\Models\Employee;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class AjaxController extends Controller {
@@ -111,7 +112,9 @@ class AjaxController extends Controller {
 
     private function getCreateTaskFormViaAjax($mode) {
         if ($mode == 'add') {
-            $data = view('project-task.add-project-task')->render();
+            $team_members = get_employee_children_in_depth((int)get_logged_in_user_emp_id());
+            $projects = Project::query()->select('pro_id', 'pro_name')->get()->pluck('pro_name', 'pro_id')->toArray();
+            $data = view('project-task.add-project-task', compact('team_members', 'projects'))->render();
         } else {
             $data = '';
         }

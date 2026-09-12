@@ -693,13 +693,32 @@ document.addEventListener('DOMContentLoaded', function (e) {
     }).showToast();
 };*/
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Tooltips
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]:not([data-bs-toggle="modal"])');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    function initBootstrapComponents(container = document) {
+        // Initialize Tooltips
+        const tooltipTriggerList = container.querySelectorAll('[data-bs-toggle="tooltip"]:not([data-bs-toggle="modal"])');
+        tooltipTriggerList.forEach(tooltipTriggerEl => {
+            if (!bootstrap.Tooltip.getInstance(tooltipTriggerEl)) {
+                new bootstrap.Tooltip(tooltipTriggerEl, {
+                    container: 'body'
+                });
+            }
+        });
 
-    // Initialize Popovers (including inside modals)
-    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-    [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {
-        container: 'body' // Keeps popover correctly placed relative to the modal
-    }));
+
+        // Initialize Popovers
+        const popoverTriggerList = container.querySelectorAll('[data-bs-toggle="popover"]');
+        popoverTriggerList.forEach(popoverTriggerEl => {
+            if (!bootstrap.Popover.getInstance(popoverTriggerEl)) {
+                new bootstrap.Popover(popoverTriggerEl, {
+                    container: 'body'
+                });
+            }
+        });
+    }
+
+    // Initial page load
+    initBootstrapComponents();
+
+    // Make it available globally for AJAX-loaded content
+    window.initBootstrapComponents = initBootstrapComponents;
 });

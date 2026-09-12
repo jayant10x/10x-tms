@@ -98,6 +98,7 @@ $(document).ready(function () {
                             </div>
                         `);
                 }
+                initBootstrapComponents(modal.find('.modal-generic-body')[0]);
             },
 
             error: function (xhr) {
@@ -163,6 +164,7 @@ $(document).ready(function () {
                             </div>
                         `);
                 }
+                initBootstrapComponents(modal.find('.modal-generic-body')[0]);
             },
 
             error: function (xhr) {

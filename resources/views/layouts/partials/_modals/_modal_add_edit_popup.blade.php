@@ -42,9 +42,9 @@
             <div class="modal-body modal-generic-body">
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+            <div class="modal-footer p-1">
+                <button type="button" class="btn btn-secondary btn-sm rounded" data-bs-dismiss="modal">Close</button>
+{{--                <button type="button" class="btn btn-primary">Save changes</button>--}}
             </div>
         </div>
     </div>

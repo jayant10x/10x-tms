@@ -8,6 +8,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectTaskController;
 use App\Http\Controllers\TeamMembersController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,4 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::get('projects/add', [ProjectController::class, 'addProject'])->name('projects.add');
     Route::post('projects/save', [ProjectController::class, 'saveProject'])->name('projects.save');
     Route::get('projects/view/{pro_id}', [ProjectController::class, 'viewProject'])->name('project.view');
+
+
+    Route::post('task/create', [ProjectTaskController::class, 'store'])->name('task.create');
 });
