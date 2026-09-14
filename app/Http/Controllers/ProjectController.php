@@ -58,7 +58,6 @@ class ProjectController extends Controller {
                 return redirect()->route('projects.list')->with('error', 'Something went wrong.');
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return redirect()->route('projects.list')->with('error', 'Something went wrong.');
         }

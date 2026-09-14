@@ -31,6 +31,12 @@ $main_permission_arr = [
         'icon' => 'ri-briefcase-2-line',
         'label' => 'Projects',
     ],
+
+    'all_tasks' => [
+        'route' => 'all_tasks',
+        'icon' => 'ri-list-check-3',
+        'label' => 'All Tasks',
+    ],
 ];
 
 
@@ -86,6 +92,16 @@ $permission_arr = [
                 'delete' => true,
             ],
         ],
+
+        'all_tasks' => [
+            ...$main_permission_arr['all_tasks'],
+            'permissions' => [
+                'add' => false,
+                'edit' => false,
+                'view' => true,
+                'delete' => true,
+            ],
+        ],
     ],
 
     'manager' => [
@@ -111,6 +127,16 @@ $permission_arr = [
 
         'projects' => [
             ...$main_permission_arr['projects'],
+            'permissions' => [
+                'add' => true,
+                'edit' => false,
+                'view' => true,
+                'delete' => false,
+            ],
+        ],
+
+        'all_tasks' => [
+            ...$main_permission_arr['all_tasks'],
             'permissions' => [
                 'add' => true,
                 'edit' => false,

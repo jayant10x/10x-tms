@@ -1,4 +1,4 @@
-<form action="{{route('task.create')}}" method="post" id="task_add_edit_form">
+<form action="{{route('task.create')}}" method="post" id="task_add_edit_form" enctype="multipart/form-data">
     @csrf
     <div class="row">
         {{-- Task Title --}}
@@ -238,15 +238,39 @@
         <!-- Subtasks will appear here -->
     </div>
 
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="mb-3">
+                <label for="attachments" class="form-label">Attachment(s)
+                    <span data-bs-toggle="tooltip" data-bs-placement="top"
+                          data-bs-title="Maximum 10 media files are allowed to upload." data-bs-container="body"
+                          class="d-inline-flex align-middle">
+                    <iconify-icon icon="solar:info-circle-bold" class="fs-14 text-warning"></iconify-icon>
+                    </span>
+                </label>
+                <input class="form-control" type="file" id="attachments" name="attachments[]"
+                       accept=".jpg, .jpeg, .png, .pdf" multiple>
+                @error('attachments')
+                <span class="validation-message">
+                    {{ $message }}
+                </span>
+                @enderror
+            </div>
+        </div>
+    </div>
+
+    <div id="task_attachments" style="margin-top: -18px !important; margin-bottom: 10px">
+        <!-- Task attachment appear here -->
+    </div>
 
     {{-- Description --}}
     <div class="row">
         <div class="col-lg-12">
             <div class="mb-3">
-                <label for="project_desc" class="form-label">Description</label>
+                <label for="desc" class="form-label">Description</label>
                 <textarea class="form-control" id="project_desc" rows="5"
-                          name="project_desc">{{ old('project_desc') }}</textarea>
-                @error('project_desc')
+                          name="desc">{{ old('desc') }}</textarea>
+                @error('desc')
                 <span class="validation-message">
                     {{ $message }}
                 </span>
@@ -259,7 +283,6 @@
 </form>
 <script>
     $(document).ready(function () {
-
         let task_tags = [];
         let sub_tasks = [];
 
@@ -297,6 +320,23 @@
                 $('#sub_tasks').val('');
                 renderSubTasks();
                 sub_task_hid.val(JSON.stringify(sub_tasks));
+            }
+        });
+
+        $('#attachments').on('change', function () {
+            const files = this.files;
+            const $target = $('#task_attachments');
+
+            if (files.length > 0) {
+                const fileNames = Array.from(files).map(file => file.name);
+                $target.html(fileNames.join('<span class="text-secondary fw-bold"> | </span>'));
+                $target.css('border-bottom', '1px solid gray');
+                $target[0].style.setProperty('padding-bottom', '5px', 'important');
+                $target[0].style.setProperty('margin-bottom', '15px', 'important');
+            } else {
+                $target.html('').css('border-bottom', 'none');
+                $target[0].style.removeProperty('padding-bottom');
+                $target[0].style.removeProperty('margin-bottom');
             }
         });
 

@@ -79,4 +79,6 @@ Route::middleware('auth')->group(function () {
 
 
     Route::post('task/create', [ProjectTaskController::class, 'store'])->name('task.create');
+    Route::get('all-tasks', [ProjectTaskController::class, 'allTasks'])->name('all_tasks');
+    Route::get('task/view/{prt_id}', [ProjectTaskController::class, 'viewTask'])->name('task.view');
 });

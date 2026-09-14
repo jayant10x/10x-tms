@@ -20,4 +20,17 @@ enum TaskStatus: string {
             self::CANCELLED => 'Cancelled',
         };
     }
+
+    public function color(): string {
+        return match ($this) {
+            self::TODO => 'light',
+            self::IN_PROGRESS => 'primary',
+            self::ON_HOLD => 'warning',
+            self::REVIEW => 'purple',
+            self::COMPLETED => 'success',
+            self::CANCELLED => 'danger',
+        };
+    }
+
+
 }
