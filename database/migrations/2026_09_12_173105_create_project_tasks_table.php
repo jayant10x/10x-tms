@@ -25,8 +25,9 @@ return new class extends Migration {
             $table->date($this->_pre_col . 'start_date')->nullable()->comment('Task Start Date');
             $table->date($this->_pre_col . 'due_date')->nullable()->comment('Task Due Date');
             $table->string($this->_pre_col . 'est_hours', 20)->nullable()->comment('Task estimated hours to complete.');
-            $table->json($this->_pre_col . 'tags')->nullable()->comment('Task tags');
-            $table->text($this->_pre_col . 'description')->nullable()->comment('Task Description');
+            $table->json($this->_pre_col . 'tags')->nullable()->comment('Task tags.');
+            $table->json($this->_pre_col . 'attachments')->nullable()->comment('Task attachments.');
+            $table->text($this->_pre_col . 'description')->nullable()->comment('Task description.');
             get_created_updated_by_db_column($table, $this->_pre_col);
         });
     }
