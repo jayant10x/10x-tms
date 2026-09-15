@@ -1,0 +1,285 @@
+@extends('layouts.vertical', ['title' => 'View Task','subTitle' => 'View Task'])
+@section('css')
+    @vite(['resources/css/tasks.css','node_modules/choices.js/public/assets/styles/choices.min.css'])
+@endsection
+@section('content')
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <span
+                style="font-size: 17px; font-weight: 450; color: #454446f2 !important;">{{$task_data->prt_title}}</span>
+        </div>
+        <div class="col-md-4">
+            <div class="row justify-content-end">
+                <div class="col-md-8">
+                    <select class="form-control rounded-4" name="task_status" id="task_status_toggle"
+                            data-choices data-choices-sorting-false>
+                        <option value="">select status</option>
+                        <optgroup label="">
+                            @foreach(\App\Enums\TaskStatus::cases() as $status)
+                                <option
+                                    value="{{ $status->value }}"
+                                    @selected(old('task_status', $task_data->prt_status?->value ?? $task_data->prt_status ?? null) === $status->value)>
+                                    {{ $status->label()}}
+                                </option>
+                            @endforeach
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card task-main-cards">
+                        <div class="card-body">
+                            <p class="text-dark fw-semibold fs-16 mb-0">Description</p>
+                            <p class="mt-2 mb-0">{{get_dash_on_empty($task_data->prt_description)}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card task-main-cards">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row justify-content-between mb-1">
+                                        <div class="col-md-4 text-dark fw-semibold fs-16">
+                                            Checklist (<span id="checklist-completed">0</span> /<span
+                                                id="checklist-total">0</span>)
+                                        </div>
+                                        <div class="col-md-2 fs-14 text-primary fw-bold text-end"
+                                             id="checklist-percentage">0%
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="progress">
+                                                <div id="checklist-progress-bar"
+                                                     class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                                                     role="progressbar" style="width: 0%" aria-valuenow="0"
+                                                     aria-valuemin="0" aria-valuemax="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3 align-items-center justify-content-between" id="checklist-container">
+                                @foreach($task_data->subTasks as $sub_task)
+                                    <div class="col-md-11 text-wrap pb-2">
+                                        <input type="checkbox" class="form-check-input text-dark checklist-item"
+                                               value="{{ my_encrypt($sub_task->pst_id) }}" {{ $sub_task->pst_is_done ? 'checked' : '' }}>
+                                        <span class="checklist-text">
+                                            {{ $sub_task->pst_title }}
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-1 pb-2">
+                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top"
+                                           data-bs-title="Delete" data-sub_task_id="{{my_encrypt($sub_task->pst_id)}}"
+                                           class="delete-sub-task">
+                                            <iconify-icon icon="solar:trash-bin-trash-broken"
+                                                          class="align-middle fs-16 fw-bold text-danger"></iconify-icon>
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="row mb-1 mt-2">
+                                <div class="col-md-11">
+                                    <input type="text" id="sub_task" class="form-control" autocomplete="off"
+                                           placeholder="Add a subtask or checklist....">
+                                </div>
+
+                                <div class="col-md-1 align-content-center text-center">
+                                    <button type="button"
+                                            class="btn btn-xs btn-soft-primary btn-outline-primary rounded"
+                                            id="addSubTask">
+                                        <iconify-icon icon="solar:add-bold" class="align-middle fs-14"></iconify-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card task-main-cards">
+                        <div class="card-body">
+                            <p class="text-dark fw-semibold fs-16 mb-0">
+                                <iconify-icon icon="solar:paperclip-bold" class="align-middle"></iconify-icon>
+                                Attachments (1)
+                            </p>
+
+                            <div class="row p-2" id="task-attachments-container">
+                                @foreach($task_data->prt_attachments ?? [] as $attachment)
+                                    <div class="col-md-12 attachment-files m-1">
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                {{$attachment}}
+                                            </div>
+                                            <div class="col-md-1">
+                                                <a href="{{ asset('storage/task_attachments/'.$attachment) }}"
+                                                   download="{{ $attachment }}" data-bs-toggle="tooltip"
+                                                   data-bs-title="Download" class="attachment-download">
+                                                    <iconify-icon icon="solar:download-linear"
+                                                                  class="align-middle fs-14 fw-bold">
+                                                    </iconify-icon>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="file" id="task_attachment" name="runtime_task_attachment"
+                                           accept=".pdf,.jpg,.jpeg,.png" hidden>
+                                    <a href="javascript:void(0)" class="btn btn-soft-primary btn-sm rounded m-1 fw-bold"
+                                       data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Upload File" id="upload-task-attachment">
+                                        <iconify-icon icon="solar:upload-linear"
+                                                      class="align-middle fs-18"></iconify-icon>
+                                        Upload File</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card task-main-cards">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="side-card-label">PROJECT</span>
+                        </div>
+                        <div class="col-md-12">
+                            <span
+                                class="fs-5 fw-medium assignee-nameassignee-name">{{$task_data->project->pro_name}}</span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="side-card-label">PRIORITY</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span
+                                        class="badge badge-soft-{{$task_data->prt_priority?->color()}} badge-outline-{{$task_data->prt_priority?->color()}} rounded-pill me-1 fs-6"><iconify-icon
+                                            icon="solar:flag-2-broken" class="align-middle fs-7"></iconify-icon>{!! $task_data->prt_priority?->label() !!}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="side-card-label">CATEGORY</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span
+                                        class="fs-5 fw-medium assignee-name">{{$task_data->prt_category->label()}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 mb-1">
+                            <span class="side-card-label">ASSIGNEES</span>
+                        </div>
+                        @foreach($task_assignees as $assignee)
+                            <div class="col-md-12 mb-1">
+                                <div class="assignee-item">
+                                    <span class="assignee-char">
+                                        {{ get_initials_char($assignee) }}
+                                    </span>
+                                    <span class="assignee-name">
+                                        {{ $assignee }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 mb-1">
+                            <span class="side-card-label">ASSIGNED BY</span>
+                        </div>
+                        <div class="col-md-12 mb-1">
+                            <div class="assignee-item">
+                                    <span class="assignee-char" style="background: #585f6e !important;">
+                                        {{ get_initials_char(array_first($task_assigned_by)) }}
+                                    </span>
+                                <span class="assignee-name">
+                                        {{ array_first($task_assigned_by) }}
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 mb-1">
+                            <span class="side-card-label">START DATE</span>
+                        </div>
+                        <div class="col-md-12 mb-1">
+                            <iconify-icon icon="solar:calendar-mark-broken" class="align-middle fs-5"></iconify-icon>
+                            <span class="assignee-name">
+                                {{ get_date_time_format($task_data->prt_start_date) }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 mb-1">
+                            <span class="side-card-label">DUE DATE</span>
+                        </div>
+                        <div class="col-md-12 mb-1">
+                            <iconify-icon icon="solar:calendar-mark-broken"
+                                          class="align-middle fs-5 text-danger"></iconify-icon>
+                            <span class="assignee-name text-danger">
+                                {{ get_date_time_format($task_data->prt_start_date) }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 mb-1">
+                            <span class="side-card-label">ESTIMATED TIME</span>
+                        </div>
+                        <div class="col-md-12 mb-1">
+                            <iconify-icon icon="solar:clock-circle-bold-duotone"
+                                          class="align-middle fs-4 text-dark"></iconify-icon>
+                            <span class="assignee-name text-dark">
+                                {{ $task_data->prt_est_hours }}h
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 mb-1">
+                            <span class="side-card-label">TAGS</span>
+                        </div>
+                        <div class="col-md-12 mb-1">
+                            <div class="d-flex flex-wrap gap-1">
+                                @foreach($task_data->prt_tags as $tag)
+                                    <span class="badge text-wrap tag-pill rounded-pill">
+                                        {{ $tag }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('module-right-section')
+    {!! generate_back_to_list_button(route('all_tasks')) !!}
+@endsection
+@push('script')
+    <script>
+        let task_id = '{{my_encrypt($task_data->prt_id)}}';
+    </script>
+    @vite(['resources/js/pages/tasks.js' ])
+@endpush

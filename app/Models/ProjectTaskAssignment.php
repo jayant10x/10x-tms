@@ -13,4 +13,12 @@ class ProjectTaskAssignment extends Model {
     public function project_tasks() {
         return $this->hasMany(ProjectTask::class, 'prt_pro_id', 'pro_id');
     }
+
+    public function projectTaskAssignTo() {
+        return $this->belongsTo(Employee::class, 'pta_assign_to', 'emp_id');
+    }
+
+    public function projectTaskAssignedBy() {
+        return $this->belongsTo(Employee::class, 'pta_assign_by', 'emp_id');
+    }
 }

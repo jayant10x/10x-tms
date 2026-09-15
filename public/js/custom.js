@@ -183,3 +183,7 @@ $(document).ready(function () {
         });
     });
 });
+
+function escapeHtml(text) {
+    return $('<div>').text(text).html();
+}

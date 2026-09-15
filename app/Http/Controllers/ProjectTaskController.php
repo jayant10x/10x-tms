@@ -15,9 +15,9 @@ class ProjectTaskController extends Controller {
 
         $projectTaskQuery = ProjectTask::query()
             ->with('project')
-            ->join('project_task_assignments', 'project_tasks.prt_id', '=',  'project_task_assignments.pta_prt_id')
+            ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
             ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_to')
-            ->select( 'project_tasks.*', DB::raw('GROUP_CONCAT(DISTINCT ' . $prefix . 'employees.emp_full_name ORDER BY ' . $prefix . 'employees.emp_full_name SEPARATOR ", ") as assignees'))
+            ->select('project_tasks.*', DB::raw('GROUP_CONCAT(DISTINCT ' . $prefix . 'employees.emp_full_name ORDER BY ' . $prefix . 'employees.emp_full_name SEPARATOR ", ") as assignees'))
             ->groupBy('project_tasks.prt_id');
         if (!is_admin()) {
             $loggedInEmpId = get_logged_in_user_emp_id();
@@ -104,19 +104,94 @@ class ProjectTaskController extends Controller {
             DB::commit();
             return redirect()->back()->with('success', 'Task added successfully.');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong.');
         } catch (\Throwable $e) {
-            dd($e->getMessage());
             DB::rollBack(); // ADDED: Missed a rollback statement in your original second catch block
             return redirect()->back()->with('error', 'Something went wrong in transaction.');
         }
     }
 
-
     public function viewTask($prt_id) {
-        dd($prt_id);
+        $prt_id = my_decrypt($prt_id);
+        $task_data = ProjectTask::query()->with(['subTasks:pst_id,pst_prt_id,pst_title,pst_is_done', 'projectTaskAssignments:pta_prt_id,pta_assign_by,pta_assign_to', 'project:pro_id,pro_name', 'projectTaskAssignments.projectTaskAssignTo:emp_id,emp_full_name', 'projectTaskAssignments.projectTaskAssignedBy:emp_id,emp_full_name'])->where('prt_id', '=', $prt_id)->first();
+
+        $task_assignees = [];
+        $task_assigned_by = [];
+        if (!empty($task_data->projectTaskAssignments)) {
+            foreach ($task_data->projectTaskAssignments as $task_assignment) {
+                if (!in_array($task_assignment->projectTaskAssignTo->emp_id, array_keys($task_assignees))) {
+                    $task_assignees[$task_assignment->projectTaskAssignTo->emp_id] = $task_assignment->projectTaskAssignTo->emp_full_name;
+                }
+                if (count($task_assigned_by) == 0) {
+                    $task_assigned_by[$task_assignment->projectTaskAssignedBy->emp_id] = $task_assignment->projectTaskAssignedBy->emp_full_name;
+                }
+            }
+        }
+        return view('project-task.view-task', compact('prt_id', 'task_data', 'task_assignees', 'task_assigned_by'));
+    }
+
+    public function updateTaskStatus(Request $request, $prt_id) {
+        $prt_id = my_decrypt($prt_id);
+        $taskExist = ProjectTask::query()->where('prt_id', '=', $prt_id)->first();
+        if (!empty($taskExist)) {
+            $taskExist->prt_status = $request->status;
+            $is_updated = $taskExist->save();
+            if (!$is_updated) {
+                return response()->json(['status' => false, 'message' => 'Task status not updated.',], 500);
+            }
+            return response()->json(['status' => true, 'message' => 'Task status updated successfully.'], 200);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Task not found.',], 404);
+        }
+    }
+
+    public
+    function uploadTaskAttachment(Request $request, $prt_id) {
+        $prt_id = my_decrypt($prt_id);
+
+        $task = ProjectTask::query()->where('prt_id', $prt_id)->first();
+
+        if (!$task) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Task not found.',
+            ], 404);
+        }
+
+        $request->validate([
+            'task_attachment' => [
+                'required',
+                'file',
+                'mimes:pdf,jpg,jpeg,png',
+                'max:3072', // 3MB
+            ],
+        ]);
+
+        $file = $request->file('task_attachment');
+
+        $originalNameOnly = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+        $extension = $file->getClientOriginalExtension();
+        $fileName = $originalNameOnly . '_' . time() . '.' . $extension;
+        $file->storeAs('task_attachments', $fileName, 'public');
+
+        $attachments = $task->prt_attachments ?? [];
+        if (!is_array($attachments)) {
+            $attachments = [];
+        }
+        $attachments[] = $fileName;
+        $task->prt_attachments = $attachments;
+        $task->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'File uploaded successfully.',
+            'data' => [
+                'file_name' => $fileName,
+                'original_name' => $file->getClientOriginalName(),
+                'url' => asset('storage/task_attachments/' . $fileName),
+            ],
+        ]);
     }
 
     private function taskAssignment($prt_id, $assignees) {

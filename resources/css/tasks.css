@@ -1,0 +1,81 @@
+.task-main-cards {
+    border: 1px solid #d3e8ff !important;
+    border-radius: 10px !important;
+    padding: 20px -10px !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
+}
+
+.assignee-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.assignee-char {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    max-width: 28px;
+
+    flex: 0 0 28px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #2f55c7;
+    color: #fff;
+
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.assignee-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #212529;
+    line-height: 28px;
+}
+
+.tag-pill {
+    background: rgb(187 176 255) !important;
+    width: fit-content;
+    max-width: 100%;
+    white-space: normal;
+    color: #000000 !important;
+    font-size: 12px !important;
+    border: 1px solid rgb(131 119 228) !important;
+}
+
+.checklist-completed {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+
+.side-card-label {
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: black !important;
+}
+
+.attachment-files {
+    border: 1px solid #dadbdd;
+    border-radius: 6px;
+    background: #f9fafb;
+    padding: 10px;
+    color: #3a3a3a;
+}
+
+.attachment-download {
+    padding: 5px;
+}
+
+.attachment-download:hover {
+    background: #a9d4fd;
+    border-radius: 5px;
+    color: black;
+}

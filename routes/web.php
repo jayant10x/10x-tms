@@ -8,6 +8,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectSubTaskController;
 use App\Http\Controllers\ProjectTaskController;
 use App\Http\Controllers\TeamMembersController;
 use Illuminate\Support\Facades\Route;
@@ -81,4 +82,10 @@ Route::middleware('auth')->group(function () {
     Route::post('task/create', [ProjectTaskController::class, 'store'])->name('task.create');
     Route::get('all-tasks', [ProjectTaskController::class, 'allTasks'])->name('all_tasks');
     Route::get('task/view/{prt_id}', [ProjectTaskController::class, 'viewTask'])->name('task.view');
+    Route::post('/update-task-status/{prt_id}', [ProjectTaskController::class, 'updateTaskStatus'])->name('add_task_status_via_ajax');
+    Route::post('/upload-task-attachment/{prt_id}', [ProjectTaskController::class, 'uploadTaskAttachment'])->name('upload_task_attachments_via_ajax');
+    Route::post('/update-sub-task-via-ajax/is-done/{pst_id}', [ProjectSubTaskController::class, 'updateSubTaskIsDone'])->name('update_sub_task.is_done');
+    Route::post('/add-sub-task-via-ajax/{prt_id}', [ProjectSubTaskController::class, 'addSubTask'])->name('add_sub_task_via_ajax');
+    Route::delete('/delete-sub-task-via-ajax/{pst_id}/{prt_id}', [ProjectSubTaskController::class, 'deleteSubTask'])->name('delete_sub_task_via_ajax');
+
 });

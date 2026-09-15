@@ -722,3 +722,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // Make it available globally for AJAX-loaded content
     window.initBootstrapComponents = initBootstrapComponents;
 });
+
+
+window.showNotification = function (message, type) {
+    let notifications_data = [
+        {type: 'success', bg: '#10B981'},
+        {type: 'error', bg: '#EF4444'},
+        {type: 'info', bg: '#3B82F6'},
+        {type: 'warning', bg: '#F59E0B'}
+    ];
+    console.log(notifications_data);
+    let notification = notifications_data.find(
+        item => item.type === type
+    );
+    console.log(notification);
+    let backgroundColor = notification
+        ? notification.bg
+        : '#3B82F6';
+
+    Toastify({
+        newWindow: true,
+        text: message,
+        gravity: 'top',
+        position: 'right',
+        stopOnFocus: true,
+        duration: 3000,
+        close: true,
+        style: {
+            background: backgroundColor
+        }
+    }).showToast();
+};

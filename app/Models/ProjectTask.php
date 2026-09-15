@@ -32,4 +32,8 @@ class ProjectTask extends Model {
     public function projectTaskAssignments(): HasMany {
         return $this->hasMany(ProjectTaskAssignment::class, 'pta_prt_id', 'prt_id');
     }
+
+    public function subTasks(): HasMany {
+        return $this->hasMany(ProjectSubTask::class, 'pst_prt_id', 'prt_id');
+    }
 }

@@ -22,11 +22,6 @@ if (!function_exists('generate_back_to_list_button')) {
         return sprintf(config('buttons.back_to_list'), $url, $class, $text);
     }
 }
-if (!function_exists('generate_back_to_list_button')) {
-    function generate_back_to_list_button(string $url, string $class = '', string $text = ''): string {
-        return sprintf(config('buttons.back_to_list'), $url, $class, $text);
-    }
-}
 
 if (!function_exists('generate_add_button')) {
     function generate_add_button(string $url, string $class = '', string $title = '', string $text = ''): string {
