@@ -143,7 +143,7 @@
                          </button>
                     </div>
 --}}
-                    @if(get_logged_in_user_role() == 'manager')
+                    @if(/*get_logged_in_user_role() == 'manager'*/permission_can('all_tasks', 'add'))
                         <div class="topbar-item d-none d-md-flex">
                             {!! generate_ajax_button(
                                 tooltip_title: 'Create Task',

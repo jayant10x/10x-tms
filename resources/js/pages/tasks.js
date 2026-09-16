@@ -259,8 +259,9 @@ $(document).ready(function () {
                     return;
                 }
                 showNotification(response.message, 'success');
-                addAttachmentToList(response.data);
-                $('#task_attachment').val('');
+                setTimeout(function () {
+                    location.reload();
+                }, 3000);
             },
 
             error: function (xhr) {
@@ -276,28 +277,4 @@ $(document).ready(function () {
             }
         });
     });
-
-    function addAttachmentToList(attachment) {
-        let html = `
-        <div class="col-md-12 attachment-files m-1">
-            <div class="row">
-                <div class="col-md-11">
-                    ${escapeHtml(attachment.original_name)}
-                </div>
-                <div class="col-md-1">
-                    <a href="${attachment.url}"
-                       download="${escapeHtml(attachment.original_name)}"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="top"
-                       data-bs-title="Download"
-                        <iconify-icon
-                            icon="solar:download-linear"
-                            class="align-middle fs-14 fw-bold">
-                        </iconify-icon>
-                    </a>
-                </div>
-            </div>
-        </div>`;
-        $('#task-attachments-container').append(html);
-    }
 });

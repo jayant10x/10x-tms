@@ -33,6 +33,21 @@ class ProjectTaskController extends Controller {
         return view('project-task.all-tasks', compact('project_tasks'));
     }
 
+    public function assignedToMe(Request $request) {
+        $all_assigned_to_me = null;
+
+        if (!is_admin()) {
+            $loggedInEmpId = get_logged_in_user_emp_id();
+
+            $all_assigned_to_me = ProjectTask::query()
+                ->with('project')
+                ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
+                ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_by')
+                ->where('pta_assign_to', $loggedInEmpId)->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
+        }
+        return view('project-task.all-my-tasks', compact('all_assigned_to_me'));
+    }
+
     public function store(Request $request) {
         $request->merge([
             'task_tags_hid' => $request->has('task_tags_hid') ? json_decode($request->task_tags_hid, true) : null,
@@ -146,8 +161,7 @@ class ProjectTaskController extends Controller {
         }
     }
 
-    public
-    function uploadTaskAttachment(Request $request, $prt_id) {
+    public function uploadTaskAttachment(Request $request, $prt_id) {
         $prt_id = my_decrypt($prt_id);
 
         $task = ProjectTask::query()->where('prt_id', $prt_id)->first();
@@ -157,6 +171,13 @@ class ProjectTaskController extends Controller {
                 'status' => false,
                 'message' => 'Task not found.',
             ], 404);
+        }
+
+        if (count($task->prt_attachments) > 10) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Maximum number of attachments exceeded.',
+            ],);
         }
 
         $request->validate([

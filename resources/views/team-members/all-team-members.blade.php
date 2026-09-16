@@ -10,8 +10,9 @@
         }
     </style>
     @if(!empty($all_team_members))
+    @dd($all_team_members)
         <div class="row">
-            @foreach($all_team_members as $member_key => $member_val)
+            @foreach($all_team_members as $member_val)
                 @php
                     $emp_photo = asset('images/users/dummy-avatar.jpg');
                     if(!empty($member_val['emp_photo'])) {
@@ -20,7 +21,7 @@
                 @endphp
                 <div class="col-xl-4 col-lg-6">
                     @if(permission('team_members', 'view'))
-                        <a href="{{route('team_member.view', ['called_from' => 'team', 'member_id' => my_encrypt($member_key)])}}"
+                        <a href="{{route('team_member.view', ['called_from' => 'team', 'member_id' => my_encrypt($member_val->emp_id)])}}"
                            target="_self">
                             @endif
                             <div class="card">
@@ -29,12 +30,12 @@
                                         <img src="{{$emp_photo}}"
                                              class="avatar-lg rounded-3 border border-light border-3">
                                         <div class="d-block">
-                                            <p class="text-dark fw-medium fs-16 mb-0">{{$member_val['emp_full_name']}}</p>
-                                            <p class="mb-0">{{$member_val['emp_email']}}</p>
+                                            <p class="text-dark fw-medium fs-16 mb-0">{{$member_val->emp_full_name}}</p>
+                                            <p class="mb-0">{{$member_val->emp_email}}</p>
                                             <div class="mt-1"><span
-                                                    class="mb-0 text-primary"># {{$member_val['emp_internal_id']}}</span>
+                                                    class="mb-0 text-primary"># {{$member_val->emp_internal_id}}</span>
                                                 <b> | </b><span
-                                                    class="badge designation-badge rounded-pill me-1 fs-6">{{\App\Enums\DesignationEnum::from($member_val['emp_designation'])->label()}}</span>
+                                                    class="badge designation-badge rounded-pill me-1 fs-6">{{\App\Enums\DesignationEnum::from($member_val->emp_designation)->label()}}</span>
                                             </div>
                                         </div>
                                     </div>

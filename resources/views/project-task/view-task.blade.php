@@ -3,30 +3,35 @@
     @vite(['resources/css/tasks.css','node_modules/choices.js/public/assets/styles/choices.min.css'])
 @endsection
 @section('content')
+    @php
+        $is_authorized_to_edit = permission_can('all_my_tasks', 'edit') || get_logged_in_user_role() == 'manager';
+    @endphp
     <div class="row align-items-center">
         <div class="col-md-8">
             <span
                 style="font-size: 17px; font-weight: 450; color: #454446f2 !important;">{{$task_data->prt_title}}</span>
         </div>
-        <div class="col-md-4">
-            <div class="row justify-content-end">
-                <div class="col-md-8">
-                    <select class="form-control rounded-4" name="task_status" id="task_status_toggle"
-                            data-choices data-choices-sorting-false>
-                        <option value="">select status</option>
-                        <optgroup label="">
-                            @foreach(\App\Enums\TaskStatus::cases() as $status)
-                                <option
-                                    value="{{ $status->value }}"
-                                    @selected(old('task_status', $task_data->prt_status?->value ?? $task_data->prt_status ?? null) === $status->value)>
-                                    {{ $status->label()}}
-                                </option>
-                            @endforeach
-                        </optgroup>
-                    </select>
+        @if($is_authorized_to_edit)
+            <div class="col-md-4">
+                <div class="row justify-content-end">
+                    <div class="col-md-8">
+                        <select class="form-control rounded-4" name="task_status" id="task_status_toggle"
+                                data-choices data-choices-sorting-false>
+                            <option value="">select status</option>
+                            <optgroup label="">
+                                @foreach(\App\Enums\TaskStatus::cases() as $status)
+                                    <option
+                                        value="{{ $status->value }}"
+                                        @selected(old('task_status', $task_data->prt_status?->value ?? $task_data->prt_status ?? null) === $status->value)>
+                                        {{ $status->label()}}
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 
     <div class="row mt-4">
@@ -71,37 +76,46 @@
                             <div class="row mt-3 align-items-center justify-content-between" id="checklist-container">
                                 @foreach($task_data->subTasks as $sub_task)
                                     <div class="col-md-11 text-wrap pb-2">
-                                        <input type="checkbox" class="form-check-input text-dark checklist-item"
-                                               value="{{ my_encrypt($sub_task->pst_id) }}" {{ $sub_task->pst_is_done ? 'checked' : '' }}>
+                                        @if($is_authorized_to_edit)
+                                            <input type="checkbox" class="form-check-input text-dark checklist-item"
+                                                   value="{{ my_encrypt($sub_task->pst_id) }}" {{ $sub_task->pst_is_done ? 'checked' : '' }}>
+                                        @endif
                                         <span class="checklist-text">
                                             {{ $sub_task->pst_title }}
                                         </span>
                                     </div>
 
-                                    <div class="col-md-1 pb-2">
-                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top"
-                                           data-bs-title="Delete" data-sub_task_id="{{my_encrypt($sub_task->pst_id)}}"
-                                           class="delete-sub-task">
-                                            <iconify-icon icon="solar:trash-bin-trash-broken"
-                                                          class="align-middle fs-16 fw-bold text-danger"></iconify-icon>
-                                        </a>
-                                    </div>
+                                    @if($is_authorized_to_edit)
+                                        <div class="col-md-1 pb-2">
+                                            <a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                               data-bs-placement="top"
+                                               data-bs-title="Delete"
+                                               data-sub_task_id="{{my_encrypt($sub_task->pst_id)}}"
+                                               class="delete-sub-task">
+                                                <iconify-icon icon="solar:trash-bin-trash-broken"
+                                                              class="align-middle fs-16 fw-bold text-danger"></iconify-icon>
+                                            </a>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
-                            <div class="row mb-1 mt-2">
-                                <div class="col-md-11">
-                                    <input type="text" id="sub_task" class="form-control" autocomplete="off"
-                                           placeholder="Add a subtask or checklist....">
-                                </div>
+                            @if(permission_can('all_tasks', 'add'))
+                                <div class="row mb-1 mt-2">
+                                    <div class="col-md-11">
+                                        <input type="text" id="sub_task" class="form-control" autocomplete="off"
+                                               placeholder="Add a subtask or checklist....">
+                                    </div>
 
-                                <div class="col-md-1 align-content-center text-center">
-                                    <button type="button"
-                                            class="btn btn-xs btn-soft-primary btn-outline-primary rounded"
-                                            id="addSubTask">
-                                        <iconify-icon icon="solar:add-bold" class="align-middle fs-14"></iconify-icon>
-                                    </button>
+                                    <div class="col-md-1 align-content-center text-center">
+                                        <button type="button"
+                                                class="btn btn-xs btn-soft-primary btn-outline-primary rounded"
+                                                id="addSubTask">
+                                            <iconify-icon icon="solar:add-bold"
+                                                          class="align-middle fs-14"></iconify-icon>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -112,7 +126,14 @@
                         <div class="card-body">
                             <p class="text-dark fw-semibold fs-16 mb-0">
                                 <iconify-icon icon="solar:paperclip-bold" class="align-middle"></iconify-icon>
-                                Attachments (1)
+                                Attachments ({{count($task_data->prt_attachments)}})
+                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                      data-bs-title="Maximum 10 files get uploaded."
+                                      data-bs-container="body"
+                                      class="d-inline-flex align-middle">
+                                        <iconify-icon icon="solar:info-circle-bold"
+                                                      class="fs-14 text-warning"></iconify-icon>
+                                    </span>
                             </p>
 
                             <div class="row p-2" id="task-attachments-container">
@@ -135,17 +156,21 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <input type="file" id="task_attachment" name="runtime_task_attachment"
-                                           accept=".pdf,.jpg,.jpeg,.png" hidden>
-                                    <a href="javascript:void(0)" class="btn btn-soft-primary btn-sm rounded m-1 fw-bold"
-                                       data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Upload File" id="upload-task-attachment">
-                                        <iconify-icon icon="solar:upload-linear"
-                                                      class="align-middle fs-18"></iconify-icon>
-                                        Upload File</a>
+                            @if($is_authorized_to_edit)
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <input type="file" id="task_attachment" name="runtime_task_attachment"
+                                               accept=".pdf,.jpg,.jpeg,.png" hidden>
+                                        <a href="javascript:void(0)"
+                                           class="btn btn-soft-primary btn-sm rounded m-1 fw-bold"
+                                           data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Upload File"
+                                           id="upload-task-attachment">
+                                            <iconify-icon icon="solar:upload-linear"
+                                                          class="align-middle fs-18"></iconify-icon>
+                                            Upload File</a>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -275,7 +300,16 @@
     </div>
 @endsection
 @section('module-right-section')
-    {!! generate_back_to_list_button(route('all_tasks')) !!}
+   {{-- @php
+        $back_to_list_url = 'all_my_tasks';
+        if ($section == 'all_tasks'){
+            $back_to_list_url = 'all_tasks';
+        }
+        if ($section == 'projects'){
+            $back_to_list_url = 'all_tasks';
+        }
+    @endphp--}}
+    {!! generate_back_to_list_button(url()->previous()) !!}
 @endsection
 @push('script')
     <script>

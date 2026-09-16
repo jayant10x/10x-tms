@@ -26,7 +26,7 @@
                     </div>
 
                     <div class="mini-number">
-                        24
+                        {{count($project_tasks) ?? 0}}
                     </div>
 
                     <div class="mini-label">
@@ -49,7 +49,7 @@
                         <i class="bi bi-check2-circle"></i>
                     </div>
                     <div class="mini-number">
-                        18
+                        {{$task_statistics['completed_tasks']}}
                     </div>
                     <div class="mini-label">
                         Completed
@@ -69,7 +69,7 @@
                         <i class="bi bi-fire"></i>
                     </div>
                     <div class="mini-number">
-                        6
+                        {{$task_statistics['pending_tasks']}}
                     </div>
                     <div class="mini-label">
                         Remaining
@@ -90,7 +90,7 @@
                         <i class="bi bi-people"></i>
                     </div>
                     <div class="mini-number">
-                        4
+                        {{count($project_team) ?? 0}}
                     </div>
                     <div class="mini-label">
                         Team Size
@@ -116,7 +116,7 @@
                                 <a href="#project_tasks" data-bs-toggle="tab" aria-expanded="false"
                                    class="nav-link active">
                                     <span class="d-block d-sm-none"><i class="bx bx-home"></i></span>
-                                    <span class="d-none d-sm-block">Tasks (3)</span>
+                                    <span class="d-none d-sm-block">Tasks ({{count($project_tasks)}})</span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -157,15 +157,16 @@
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <div class="row justify-content-between mb-1">
-                                    <div class="col-md-4 fs-12">18/24 Tasks</div>
-                                    <div class="col-md-2 fs-12 text-primary fw-bold">75%</div>
+                                    <div class="col-md-4 fs-12 text-dark"><span id="task-completed"></span> / <span id="task-total"></span> Tasks</div>
+                                    <div class="col-md-2 fs-12 text-primary fw-bold" id="task-percentage"></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="progress">
                                             <div
+                                                id="task-progress-bar"
                                                 class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-                                                role="progressbar" style="width: 75%" aria-valuenow="75"
+                                                role="progressbar" style="width: 0%" aria-valuenow="0"
                                                 aria-valuemin="0"
                                                 aria-valuemax="100"></div>
                                         </div>
@@ -213,3 +214,12 @@
 @section('module-right-section')
     {!! generate_back_to_list_button(route('projects.list')) !!}
 @endsection
+
+@push('script')
+    <script>
+        let called_from = 'view_project';
+        let total = {{count($project_tasks) ?? 0}};
+        let completed = {{$task_statistics['completed_tasks']}};
+    </script>
+    @vite(['resources/js/pages/projects.js' ])
+@endpush

@@ -731,11 +731,9 @@ window.showNotification = function (message, type) {
         {type: 'info', bg: '#3B82F6'},
         {type: 'warning', bg: '#F59E0B'}
     ];
-    console.log(notifications_data);
     let notification = notifications_data.find(
         item => item.type === type
     );
-    console.log(notification);
     let backgroundColor = notification
         ? notification.bg
         : '#3B82F6';

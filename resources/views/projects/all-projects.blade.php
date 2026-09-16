@@ -17,66 +17,89 @@
     </style>
     @if(!empty($all_projects))
         <div class="row">
-            @foreach($all_projects as $pro_id => $project)
+            @foreach($all_projects as $project)
                 <div class="col-xl-4 col-lg-6">
-                    <a href="{{route('project.view', ['pro_id' => my_encrypt($pro_id)])}}" target="_self">
-                        <div class="card project-item-card">
-                            <div class="card-body">
-                                <div class="row p-2">
-                                    <div class="col-md-2 bg-primary project-first-char-count align-content-center">
-                                        {{get_initials_char($project['pro_name'], 1)}}
-                                    </div>
-                                    <div class="col-md-7 align-content-center">
-                                        <span class="fw-bold">{{$project['pro_name']}}</span><br>
-                                        <span class="mt-0 fs-12">{{!empty($project['pro_manager']) ? get_employee_data($project['pro_manager'])['emp_full_name'] : '-'}}</span>
-                                    </div>
-                                    <div
-                                        class="col-md-3 align-content-center">{!! \App\Enums\ProjectStatus::tryFrom($project['pro_status'])->badge() !!}</div>
-                                </div>
-                                @if(!empty($project['pro_description']))
-                                    <div class="row">
+                    @if(permission_can('projects', 'view'))
+                        <a href="{{route('project.view', ['pro_id' => my_encrypt($project->pro_id)])}}" target="_self">
+                            @endif
+                            <div class="card project-item-card">
+                                <div class="card-body">
+                                    <div class="row p-2">
+                                        <div class="col-md-2 bg-primary project-first-char-count align-content-center">
+                                            {{get_initials_char($project->pro_name, 1)}}
+                                        </div>
+                                        <div class="col-md-7 align-content-center">
+                                            <span class="fw-bold">{{$project->pro_name}}</span><br>
+                                            <span
+                                                class="mt-0 fs-12">{{!empty($project->pro_manager) ? get_employee_data($project->pro_manager)['emp_full_name'] : '-'}}</span>
+                                        </div>
                                         <div
-                                            class="col-md-12">{{generate_shorten_string($project['pro_description'], 50)}}</div>
+                                            class="col-md-3 align-content-center">{!! \App\Enums\ProjectStatus::tryFrom($project->pro_status)->badge() !!}</div>
                                     </div>
-                                @endif
-                                <div>
-                                    <div class="mt-2">
-                                        <div class="row justify-content-between mb-1">
-                                            <div class="col-md-4 fs-12">18/24 Tasks</div>
-                                            <div class="col-md-2 fs-12 text-success fw-bold">75%</div>
-                                        </div>
-                                        <div class="progress">
+                                    @if(!empty($project->pro_description))
+                                        <div class="row">
                                             <div
-                                                class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-                                                role="progressbar" style="width: 75%" aria-valuenow="75"
-                                                aria-valuemin="0"
-                                                aria-valuemax="100"></div>
+                                                class="col-md-12">{{generate_shorten_string($project->pro_description, 50)}}</div>
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <div class="mt-2">
+                                            <div class="row justify-content-between mb-1">
+                                                <div class="col-md-4 fs-12">18/24 Tasks</div>
+                                                <div class="col-md-2 fs-12 text-success fw-bold">75%</div>
+                                            </div>
+                                            <div class="progress">
+                                                <div
+                                                    class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                                                    role="progressbar" style="width: 75%" aria-valuenow="75"
+                                                    aria-valuemin="0"
+                                                    aria-valuemax="100"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row justify-content-around mt-2">
-                                    <div class="col-md-8">
-                                        <div class="text-primary fw-bold fs-5">
-                                            8
+                                    <div class="row justify-content-around mt-2">
+                                        <div class="col-md-8">
+                                            <div class="text-primary fw-bold fs-5">
+                                                8
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4 fs-12">
-                                        <iconify-icon icon="solar:calendar-bold"
-                                                      class="align-middle fs-12"></iconify-icon> {{$project['pro_deadline']}}
+                                        <div class="col-md-4 fs-12">
+                                            <iconify-icon icon="solar:calendar-bold"
+                                                          class="align-middle fs-12"></iconify-icon> {{$project->pro_deadline}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                            @if(permission_can('projects', 'view'))
+                        </a>
+                    @endif
                 </div>
             @endforeach
         </div>
     @else
         {!! generate_no_record_html() !!}
     @endif
+    @if(!empty($all_projects) && count($all_projects) > 0)
+        {{--<div class="card-footer">
+
+        </div>--}}
+        <div>
+            Showing
+            {{ $all_projects->firstItem() }}
+            to
+            {{ $all_projects->lastItem() }}
+            of
+            {{ $all_projects->total() }}
+            projects
+        </div>
+
+        <div>
+            {{ $all_projects->links() }}
+        </div>
+    @endif
 @endsection
 
-@if(/*!is_admin() && get_logged_in_user_role() == 'manager' && */permission('projects', 'add'))
+@if(/*!is_admin() && get_logged_in_user_role() == 'manager' && */permission_can('projects', 'add'))
     @section('module-right-section')
         {!! generate_add_button(route('projects.add'), title:' Project', text: ' Project') !!}
     @endsection

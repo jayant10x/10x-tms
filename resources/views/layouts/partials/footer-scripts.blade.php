@@ -1,5 +1,5 @@
-@stack('script')
 @vite(['resources/js/app.js','resources/js/layout.js','resources/js/pages/project-task-form.js'])
+@stack('script')
 <script type="importmap">
     {
       "imports": {

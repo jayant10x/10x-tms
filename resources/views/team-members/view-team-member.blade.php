@@ -8,6 +8,11 @@
         if(!empty($member_info['emp_photo'])) {
             $member_photo = asset('storage/employees/'. $member_info['emp_photo']);
         }
+        $total_task_count = $emp_task_statistics['total_task'];
+        $completed_task_count = $emp_task_statistics['completed_task'];
+
+        $remaining_tasks_count = $total_task_count - $completed_task_count;
+        $completion_percentage = $total_task_count > 0 ? round(($completed_task_count / $total_task_count) * 100) : 0;
     @endphp
 
     <div class="card p-2" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
@@ -56,7 +61,7 @@
                     <i class="bi bi-list-task"></i>
                 </div>
                 <div class="team-stat-number">
-                    8
+                    {{$total_task_count}}
                 </div>
                 <div class="team-stat-label">
                     Active Tasks
@@ -71,7 +76,7 @@
                     <i class="bi bi-check2-circle"></i>
                 </div>
                 <div class="team-stat-number">
-                    47
+                    {{$completed_task_count}}
                 </div>
                 <div class="team-stat-label">
                     Completed
@@ -86,7 +91,7 @@
                     <i class="bi bi-fire"></i>
                 </div>
                 <div class="team-stat-number">
-                    3
+                    {{$remaining_tasks_count}}
                 </div>
                 <div class="team-stat-label">
                     Pending
@@ -101,7 +106,7 @@
                     <i class="bi bi-percent"></i>
                 </div>
                 <div class="team-stat-number">
-                    81%
+                    {{$completion_percentage}}
                 </div>
                 <div class="team-stat-label">
                     Completion Rate
@@ -116,37 +121,77 @@
             <span class="fs-5 fw-bold">Assigned Tasks</span>
         </div>
         <div class="card-body pt-0">
-            <div class="table-responsive">
-                <table class="table align-middle text-nowrap table-hover table-centered mb-0">
-                    <thead class="table-light">
-                    <tr>
-                        <th width="4%">Sr. no.</th>
-                        <th width="30%">Task</th>
-                        <th width="15%">Project</th>
-                        <th width="12%">Priority</th>
-                        <th width="12%">Due Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1.{{--{{$loop->iteration}}--}}.</td>
-                        <td>Redesign user authentication flow</td>
-                        <td>Assignee</td>
-                        <td>Priority</td>
-                        <td>Due Date</td>
-                        <td>Status</td>
-                        <td>
-                            <div class="d-flex gap-2">
-                                {!! generate_view_button(route('employees.view', ['emp_id' => my_encrypt(1)])) !!}
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            @if(!empty($emp_tasks))
+                <div class="table-responsive">
+                    <table class="table align-middle text-nowrap table-hover table-centered mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th width="4%">Sr. no.</th>
+                            <th width="30%">Task</th>
+                            <th width="15%">Project</th>
+                            <th width="12%">Priority</th>
+                            <th width="12%">Due Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($emp_tasks as $emp_task)
+                            <tr>
+                                <td>{{$loop->iteration}}.</td>
+                                <td>
+                                    {{generate_shorten_string($emp_task->prt_title)}}
+                                </td>
+                                <td>{{$emp_task->pro_name}}</td>
+                                <td>
+                                    <span
+                                        class="badge badge-soft-{{$emp_task->prt_priority?->color()}} badge-outline-{{$emp_task->prt_priority?->color()}} rounded-pill me-1 fs-6"><iconify-icon
+                                            icon="solar:flag-2-broken" class="align-middle fs-7"></iconify-icon>{!! $emp_task->prt_priority?->label() !!}
+                                    </span>
+                                </td>
+                                <td>{{get_date_time_format($emp_task->prt_due_date)}}</td>
+                                <td>
+                                    <span
+                                        class="badge badge-soft-{{$emp_task->prt_status?->color()}} badge-outline-{{$emp_task->prt_status?->color()}} rounded-pill me-1 fs-6">{{$emp_task->prt_status?->label()}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        @if(permission_can('all_tasks', 'view') || is_admin())
+                                            {!! generate_view_button(route('task.view', [/*'section'=> 'all-tasks',*/ 'prt_id' => my_encrypt($emp_task->prt_id)])) !!}
+                                        @else
+                                            -
+                                        @endif
+                                        {{--{!! generate_edit_button(route('employees.edit', ['emp_id' => my_encrypt($employee->emp_id)])) !!}
+                                        {!! generate_delete_button(route('employees.list')) !!}--}}
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                {!! generate_no_record_html() !!}
+            @endif
         </div>
+        @if(!empty($emp_tasks) && count($emp_tasks) > 0)
+            <div class="card-footer">
+                <div>
+                    Showing
+                    {{ $emp_tasks->firstItem() }}
+                    to
+                    {{ $emp_tasks->lastItem() }}
+                    of
+                    {{ $emp_tasks->total() }}
+                    employees
+                </div>
+
+                <div>
+                    {{ $emp_tasks->links() }}
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
 

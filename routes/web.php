@@ -88,4 +88,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/add-sub-task-via-ajax/{prt_id}', [ProjectSubTaskController::class, 'addSubTask'])->name('add_sub_task_via_ajax');
     Route::delete('/delete-sub-task-via-ajax/{pst_id}/{prt_id}', [ProjectSubTaskController::class, 'deleteSubTask'])->name('delete_sub_task_via_ajax');
 
+    Route::get('all-my-tasks', [ProjectTaskController::class, 'assignedToMe'])->name('all_my_tasks');
 });

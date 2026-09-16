@@ -37,6 +37,12 @@ $main_permission_arr = [
         'icon' => 'ri-list-check-3',
         'label' => 'All Tasks',
     ],
+
+    'all_my_tasks' => [
+        'route' => 'all_my_tasks',
+        'icon' => 'ri-user-follow-line',
+        'label' => 'Assigned To Me',
+    ],
 ];
 
 
@@ -144,6 +150,16 @@ $permission_arr = [
                 'delete' => false,
             ],
         ],
+
+        'all_my_tasks' => [
+            ...$main_permission_arr['all_my_tasks'],
+            'permissions' => [
+                'add' => false,
+                'edit' => true,
+                'view' => true,
+                'delete' => false,
+            ],
+        ],
     ],
 
 
@@ -164,6 +180,16 @@ $permission_arr = [
             'permissions' => [
                 'add' => false,
                 'edit' => false,
+                'view' => true,
+                'delete' => false,
+            ],
+        ],
+
+        'all_my_tasks' => [
+            ...$main_permission_arr['all_my_tasks'],
+            'permissions' => [
+                'add' => false,
+                'edit' => true,
                 'view' => true,
                 'delete' => false,
             ],

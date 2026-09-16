@@ -7,10 +7,15 @@ document.addEventListener('DOMContentLoaded', function () {
     markAllButton.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
+
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute('content');
+
         fetch('/notifications/read-all', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-CSRF-TOKEN': csrfToken,
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 }

@@ -23,7 +23,7 @@ enum TaskStatus: string {
 
     public function color(): string {
         return match ($this) {
-            self::TODO => 'light',
+            self::TODO => 'info',
             self::IN_PROGRESS => 'primary',
             self::ON_HOLD => 'warning',
             self::REVIEW => 'purple',

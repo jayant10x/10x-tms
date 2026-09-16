@@ -77,5 +77,8 @@
     {!! generate_back_to_list_button(route('projects.list')) !!}
 @endsection
 @push('script')
+    <script>
+        let called_from = 'add_project';
+    </script>
     @vite(['resources/js/pages/projects.js' ])
 @endpush

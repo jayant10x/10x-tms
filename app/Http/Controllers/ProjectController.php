@@ -2,18 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskStatus;
+use App\Enums\UserRoleEnum;
 use App\Models\Employee;
 use App\Models\Project;
+use App\Models\ProjectTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller {
     public function index(Request $request) {
+        $loggedInUser = get_logged_in_user_emp_id();
+
         $allProjectQuery = Project::query();
         if (!is_admin()) {
-            $allProjectQuery->where('pro_manager', '=', get_logged_in_user_emp_id());
+            if (get_logged_in_user_role() == UserRoleEnum::MANAGER->value) {
+                $allProjectQuery->where('pro_manager', '=', $loggedInUser);
+            } else {
+                $allProjectQuery->whereExists(function ($query) use ($loggedInUser) {
+                    $query->select(DB::raw(1))
+                        ->from('project_tasks')
+                        ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
+                        ->whereColumn('project_tasks.prt_pro_id', 'projects.pro_id')
+                        ->where('project_task_assignments.pta_assign_to', '=', $loggedInUser);
+                });
+            }
         }
-        $all_projects = $allProjectQuery->get()->keyBy('pro_id')->toArray();
+        $all_projects = $allProjectQuery->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
         return view('projects.all-projects', compact('all_projects'));
     }
 
@@ -24,12 +39,38 @@ class ProjectController extends Controller {
 
     public function viewProject($pro_id) {
         $pro_id = my_decrypt($pro_id);
-        $project_manager = [];
+        $project_manager = $project_team = [];
+        $prefix = config('constants.TABLE_PREFIX');
+
         $project_data = Project::query()->where('pro_id', '=', $pro_id)->first()->toArray();
+
+        $project_tasks = ProjectTask::query()
+            ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
+            ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_to')
+            ->select('project_tasks.*', DB::raw('GROUP_CONCAT(DISTINCT ' . $prefix . 'employees.emp_full_name ORDER BY ' . $prefix . 'employees.emp_full_name SEPARATOR ", ") as assignees'))
+            ->where('prt_pro_id', '=', $pro_id)
+            ->groupBy('project_tasks.prt_id')
+            ->get();
+
+        $project_team = ProjectTask::query()
+            ->select('pta_assign_to as team_member_emp_id', 'employees.emp_full_name', 'employees.emp_designation', 'employees.emp_photo')
+            ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
+            ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_to')
+            ->where('prt_pro_id', '=', $pro_id)->distinct('employees.emp_id')->get();
+
         if (!empty($project_data['pro_manager'])) {
             $project_manager = get_employee_data($project_data['pro_manager']);
         }
-        return view('projects.view-project', compact('project_data', 'project_manager', 'pro_id'));
+
+        $completed_tasks = count(($project_tasks->where('prt_status', '=', TaskStatus::COMPLETED->value)));
+        $pending_tasks = count($project_tasks) - $completed_tasks;
+
+        $task_statistics = [
+            'completed_tasks' => $completed_tasks,
+            'pending_tasks' => $pending_tasks,
+        ];
+
+        return view('projects.view-project', compact('project_data', 'project_manager', 'pro_id', 'project_tasks', 'project_team', 'task_statistics'));
     }
 
     public function saveProject(Request $request) {
