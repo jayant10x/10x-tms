@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskStatus;
 use App\Models\ProjectTask;
 use App\Models\ProjectTaskAssignment;
 use Illuminate\Http\Request;
@@ -46,6 +47,99 @@ class ProjectTaskController extends Controller {
                 ->where('pta_assign_to', $loggedInEmpId)->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
         }
         return view('project-task.all-my-tasks', compact('all_assigned_to_me'));
+    }
+
+    public function assignedByMe(Request $request) {
+        $all_assigned_by_me = null;
+        $prefix = config('constants.TABLE_PREFIX');
+
+
+        if (!is_admin()) {
+            $loggedInEmpId = get_logged_in_user_emp_id();
+            $projectTaskQuery = ProjectTask::query()
+                ->with('project')
+                ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
+                ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_to')
+                ->select('project_tasks.*', DB::raw('GROUP_CONCAT(DISTINCT ' . $prefix . 'employees.emp_full_name ORDER BY ' . $prefix . 'employees.emp_full_name SEPARATOR ", ") as assignees'))
+                ->groupBy('project_tasks.prt_id')
+                ->whereHas('projectTaskAssignments', function ($query) use ($loggedInEmpId) {
+                    $query->where(function ($q) use ($loggedInEmpId) {
+                        $q->where('pta_assign_by', $loggedInEmpId);
+                    });
+                });
+            $all_assigned_by_me = $projectTaskQuery->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
+        }
+        return view('project-task.all-assigned-tasks', compact('all_assigned_by_me'));
+    }
+
+    public function teamTasks(Request $request) {
+        $prefix = config('constants.TABLE_PREFIX');
+
+        $projectTaskQuery = ProjectTask::query()
+            ->with('project')
+            ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
+            ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_to')
+            ->select('project_tasks.*', DB::raw('GROUP_CONCAT(DISTINCT ' . $prefix . 'employees.emp_full_name ORDER BY ' . $prefix . 'employees.emp_full_name SEPARATOR ", ") as assignees'))
+            ->groupBy('project_tasks.prt_id');
+        if (!is_admin()) {
+            $loggedInEmpId = get_logged_in_user_emp_id();
+
+            $projectTaskQuery->whereHas('projectTaskAssignments', function ($query) use ($loggedInEmpId) {
+                $query->where(function ($q) use ($loggedInEmpId) {
+                    $q->where('pta_assign_by', $loggedInEmpId)
+                        ->orWhere('pta_assign_to', $loggedInEmpId);
+                });
+            });
+        }
+        $project_tasks = $projectTaskQuery->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
+
+        return view('project-task.all-team-tasks', compact('project_tasks'));
+    }
+
+    public function myTasks(Request $request) {
+        $my_tasks = null;
+        $task_statistics = $tasks_by_status = $calendar_tasks = [];
+
+        if (!is_admin()) {
+            $loggedInEmpId = get_logged_in_user_emp_id();
+
+            // Base query reusable across paginated list, counts, and status grouping
+            $baseQuery = ProjectTask::query()
+                ->select('project_tasks.*') // Avoid column name collisions from joins
+                ->with('project')
+                ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
+                ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_by')
+                ->where('pta_assign_to', $loggedInEmpId);
+
+            $my_tasks = (clone $baseQuery)->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
+            $calendar_tasks = $calendar_tasks = (clone $baseQuery)
+                ->get()
+                ->map(function ($task) {
+                    $task->prt_enc_id = my_encrypt($task->prt_id);
+                    return $task;
+                })
+                ->groupBy('prt_due_date')
+                ->toArray();;
+
+            // sub-task count
+            $all_tasks = (clone $baseQuery)->with('subTasks')->get();
+            $tasks_by_status = $all_tasks->groupBy('prt_status');
+
+            $task_statistics = $this->userTaskStatistics([$loggedInEmpId]);
+
+            $today_tasks = $all_tasks->where('prt_due_date', '=', date('Y-m-d'))->where('prt_status', '!=', TaskStatus::COMPLETED->value)->count();
+            $upcoming_tasks = $all_tasks->where('prt_due_date', '>', date('Y-m-d'))->where('prt_status', '!=', TaskStatus::COMPLETED->value)->count();
+            $overdue_tasks = $all_tasks->where('prt_due_date', '<', date('Y-m-d'))->where('prt_status', '!=', TaskStatus::COMPLETED->value)->count();
+
+            if (isset($task_statistics[$loggedInEmpId])) {
+                $task_statistics[$loggedInEmpId] += [
+                    'today_tasks' => $today_tasks,
+                    'upcoming_tasks' => $upcoming_tasks,
+                    'overdue_tasks' => $overdue_tasks,
+                ];
+            }
+        }
+        return view('my-tasks.my-tasks', compact('my_tasks', 'task_statistics', 'tasks_by_status', 'calendar_tasks'));
     }
 
     public function store(Request $request) {
@@ -127,7 +221,7 @@ class ProjectTaskController extends Controller {
         }
     }
 
-    public function viewTask($prt_id) {
+    public function viewTask($called_from = null, $prt_id) {
         $prt_id = my_decrypt($prt_id);
         $task_data = ProjectTask::query()->with(['subTasks:pst_id,pst_prt_id,pst_title,pst_is_done', 'projectTaskAssignments:pta_prt_id,pta_assign_by,pta_assign_to', 'project:pro_id,pro_name', 'projectTaskAssignments.projectTaskAssignTo:emp_id,emp_full_name', 'projectTaskAssignments.projectTaskAssignedBy:emp_id,emp_full_name'])->where('prt_id', '=', $prt_id)->first();
 
@@ -143,7 +237,7 @@ class ProjectTaskController extends Controller {
                 }
             }
         }
-        return view('project-task.view-task', compact('prt_id', 'task_data', 'task_assignees', 'task_assigned_by'));
+        return view('project-task.view-task', compact('prt_id', 'task_data', 'task_assignees', 'task_assigned_by', 'called_from'));
     }
 
     public function updateTaskStatus(Request $request, $prt_id) {
@@ -173,7 +267,7 @@ class ProjectTaskController extends Controller {
             ], 404);
         }
 
-        if (count($task->prt_attachments) > 10) {
+        if (!empty($task->prt_attachments) && count($task->prt_attachments) > 10) {
             return response()->json([
                 'status' => false,
                 'message' => 'Maximum number of attachments exceeded.',
@@ -237,5 +331,30 @@ class ProjectTaskController extends Controller {
             return true;
         }
         return false;
+    }
+
+    public function userTaskStatistics($emp_ids, $pro_id = null) {
+        $userTaskQuery = ProjectTask::query()->join('project_task_assignments', 'prt_id', '=', 'pta_prt_id');
+
+        if (!empty($pro_id)) {
+            $userTaskQuery->join('projects', 'prt_pro_id', '=', 'pro_id')->where('prt_pro_id', $pro_id);
+        }
+
+        $userTaskData = $userTaskQuery->whereIn('pta_assign_to', $emp_ids)->get();
+        $statistics = [];
+        foreach ($emp_ids as $emp_id) {
+            $employeeTasks = $userTaskData->where('pta_assign_to', $emp_id);
+
+            $total_tasks = $employeeTasks->count();
+            $completed_tasks = $employeeTasks->where('prt_status', TaskStatus::COMPLETED->value)->count();
+            $pending_tasks = $total_tasks - $completed_tasks;
+
+            $statistics[$emp_id] = [
+                'total_tasks' => $total_tasks,
+                'completed_tasks' => $completed_tasks,
+                'pending_tasks' => $pending_tasks,
+            ];
+        }
+        return $statistics;
     }
 }

@@ -1,24 +1,26 @@
-@if(!empty($project_tasks) && count($project_tasks) > 0)
+@if(!empty($my_tasks) && count($my_tasks) > 0)
     <div class="table-responsive">
         <table class="table align-middle text-nowrap table-hover table-centered mb-0">
             <thead class="table-light">
             <tr>
-                <th>Sr. no.</th>
-                <th width="15%">Task</th>
-                <th width="10%">Assignees</th>
-                <th width="12%">Priority</th>
+                <th width="5%">Sr. no.</th>
+                <th width="20%">Task</th>
+                <th width="15%">Project</th>
+                <th>Priority</th>
+                <th>Due Date</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($project_tasks as $task)
+            @foreach($my_tasks as $task)
                 <tr>
                     <td>{{$loop->iteration}}.</td>
                     <td>
                         {{generate_shorten_string($task->prt_title)}}
                     </td>
-                    <td class="text-center">
+                    <td>
+                        {{$task->project->pro_name}}
                         {{--@php
                                 $assignees_html = '<span>';
                                 foreach ($task->assignees as $assignee){
@@ -26,18 +28,21 @@
                                 }
                                 $assignees_html .= '</span>';
                             @endphp--}}
-                        <span data-bs-toggle="tooltip" data-bs-placement="top"
+                        {{--<span data-bs-toggle="tooltip" data-bs-placement="top"
                               data-bs-title="{{$task->assignees}}"
                               data-bs-container="body"
                               class="d-inline-flex align-middle">
                         <iconify-icon icon="solar:info-circle-bold" class="fs-14 text-warning"></iconify-icon>
-                    </span>
+                    </span>--}}
                     </td>
                     <td>
                     <span
                         class="badge badge-soft-{{$task->prt_priority?->color()}} badge-outline-{{$task->prt_priority?->color()}} rounded-pill me-1 fs-6"><iconify-icon
                             icon="solar:flag-2-broken" class="align-middle fs-7"></iconify-icon>{!! $task->prt_priority?->label() !!}
                     </span>
+                    </td>
+                    <td>
+                        {{get_date_time_format($task->prt_due_date)}}
                     </td>
                     <td>
                     <span
@@ -48,7 +53,7 @@
                         <div class="d-flex gap-2">
                             @if(permission_can('all_my_tasks', 'view') || is_admin())
                                 <div class="d-flex gap-2">
-                                    {!! generate_view_button(route('task.view', ['called_from' => 'projects', 'prt_id' => my_encrypt($task->prt_id), 'return_url' => url()->full()])) !!}
+                                    {!! generate_view_button(route('task.view', ['called_from' => 'my_task', 'prt_id' => my_encrypt($task->prt_id), 'return_url' => url()->full()])) !!}
                                 </div>
                             @endif
                             {{--{!! generate_edit_button(route('employees.edit', ['emp_id' => my_encrypt($employee->emp_id)])) !!}
@@ -62,17 +67,17 @@
     </div>
     <div>
         Showing
-        {{ $project_tasks->firstItem() }}
+        {{ $my_tasks->firstItem() }}
         to
-        {{ $project_tasks->lastItem() }}
+        {{ $my_tasks->lastItem() }}
         of
-        {{ $project_tasks->total() }}
+        {{ $my_tasks->total() }}
         tasks
     </div>
 
     <div>
-        {{ $project_tasks->links() }}
+        {{ $my_tasks->links() }}
     </div>
 @else
-    {!! generate_no_record_html() !!}
+    {!! generate_no_record_html(class:'p-0') !!}
 @endif

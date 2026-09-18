@@ -121,7 +121,7 @@
             <span class="fs-5 fw-bold">Assigned Tasks</span>
         </div>
         <div class="card-body pt-0">
-            @if(!empty($emp_tasks))
+            @if(!empty($emp_tasks) && count($emp_tasks) > 0)
                 <div class="table-responsive">
                     <table class="table align-middle text-nowrap table-hover table-centered mb-0">
                         <thead class="table-light">
@@ -158,7 +158,7 @@
                                 <td>
                                     <div class="d-flex gap-2">
                                         @if(permission_can('all_tasks', 'view') || is_admin())
-                                            {!! generate_view_button(route('task.view', [/*'section'=> 'all-tasks',*/ 'prt_id' => my_encrypt($emp_task->prt_id)])) !!}
+                                            {!! generate_view_button(route('task.view', ['called_from'=> 'team_member', 'prt_id' => my_encrypt($emp_task->prt_id), 'return_url' => url()->full()])) !!}
                                         @else
                                             -
                                         @endif
@@ -172,7 +172,7 @@
                     </table>
                 </div>
             @else
-                {!! generate_no_record_html() !!}
+                {!! generate_no_record_html(class: 'p-0') !!}
             @endif
         </div>
         @if(!empty($emp_tasks) && count($emp_tasks) > 0)
@@ -184,7 +184,7 @@
                     {{ $emp_tasks->lastItem() }}
                     of
                     {{ $emp_tasks->total() }}
-                    employees
+                    tasks
                 </div>
 
                 <div>

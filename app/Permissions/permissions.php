@@ -43,6 +43,24 @@ $main_permission_arr = [
         'icon' => 'ri-user-follow-line',
         'label' => 'Assigned To Me',
     ],
+
+    'all_assigned_tasks' => [
+        'route' => 'all_assigned_tasks',
+        'icon' => 'ri-user-shared-line',
+        'label' => 'Assigned By Me',
+    ],
+
+    'team_tasks' => [
+        'route' => 'all_team_tasks',
+        'icon' => 'ri-todo-line',
+        'label' => 'Team Tasks',
+    ],
+
+    'my_tasks' => [
+        'route' => 'my_tasks',
+        'icon' => 'ri-check-double-line',
+        'label' => 'My Tasks',
+    ],
 ];
 
 
@@ -108,6 +126,16 @@ $permission_arr = [
                 'delete' => true,
             ],
         ],
+
+        'all_assigned_tasks' => [
+            ...$main_permission_arr['all_assigned_tasks'],
+            'permissions' => [
+                'add' => false,
+                'edit' => true,
+                'view' => true,
+                'delete' => false,
+            ],
+        ],
     ],
 
     'manager' => [
@@ -145,7 +173,7 @@ $permission_arr = [
             ...$main_permission_arr['all_tasks'],
             'permissions' => [
                 'add' => true,
-                'edit' => false,
+                'edit' => true,
                 'view' => true,
                 'delete' => false,
             ],
@@ -153,6 +181,36 @@ $permission_arr = [
 
         'all_my_tasks' => [
             ...$main_permission_arr['all_my_tasks'],
+            'permissions' => [
+                'add' => false,
+                'edit' => true,
+                'view' => true,
+                'delete' => false,
+            ],
+        ],
+
+        'all_assigned_tasks' => [
+            ...$main_permission_arr['all_assigned_tasks'],
+            'permissions' => [
+                'add' => false,
+                'edit' => true,
+                'view' => true,
+                'delete' => false,
+            ],
+        ],
+
+        'team_tasks' => [
+            ...$main_permission_arr['team_tasks'],
+            'permissions' => [
+                'add' => false,
+                'edit' => true,
+                'view' => true,
+                'delete' => false,
+            ],
+        ],
+
+        'my_tasks' => [
+            ...$main_permission_arr['my_tasks'],
             'permissions' => [
                 'add' => false,
                 'edit' => true,
@@ -187,6 +245,16 @@ $permission_arr = [
 
         'all_my_tasks' => [
             ...$main_permission_arr['all_my_tasks'],
+            'permissions' => [
+                'add' => false,
+                'edit' => true,
+                'view' => true,
+                'delete' => false,
+            ],
+        ],
+
+        'my_tasks' => [
+            ...$main_permission_arr['my_tasks'],
             'permissions' => [
                 'add' => false,
                 'edit' => true,

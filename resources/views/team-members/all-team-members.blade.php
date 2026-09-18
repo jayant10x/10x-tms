@@ -10,7 +10,6 @@
         }
     </style>
     @if(!empty($all_team_members))
-    @dd($all_team_members)
         <div class="row">
             @foreach($all_team_members as $member_val)
                 @php
@@ -18,6 +17,8 @@
                     if(!empty($member_val['emp_photo'])) {
                         $emp_photo = asset('storage/employees/'. $member_val['emp_photo']);
                     }
+
+                    $work_load = $task_statistics[$member_val->emp_id]['total_tasks'] > 0 ? ($task_statistics[$member_val->emp_id]['pending_tasks'] / $task_statistics[$member_val->emp_id]['total_tasks']) * 100 : 0;
                 @endphp
                 <div class="col-xl-4 col-lg-6">
                     @if(permission('team_members', 'view'))
@@ -35,14 +36,14 @@
                                             <div class="mt-1"><span
                                                     class="mb-0 text-primary"># {{$member_val->emp_internal_id}}</span>
                                                 <b> | </b><span
-                                                    class="badge designation-badge rounded-pill me-1 fs-6">{{\App\Enums\DesignationEnum::from($member_val->emp_designation)->label()}}</span>
+                                                    class="badge designation-badge rounded-pill me-1 fs-6">{{$member_val->emp_designation->label()}}</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row justify-content-around">
                                         <div class="col-md-3 member-task-count">
                                             <div class="text-primary fw-bold fs-5">
-                                                8
+                                                {{$task_statistics[$member_val->emp_id]['total_tasks']}}
                                             </div>
                                             <div class="fs-11">
                                                 Active
@@ -50,7 +51,7 @@
                                         </div>
                                         <div class="col-md-3 member-task-count">
                                             <div class="text-success fw-bold fs-5">
-                                                47
+                                                {{$task_statistics[$member_val->emp_id]['completed_tasks']}}
                                             </div>
                                             <div class="fs-12">
                                                 Completed
@@ -58,7 +59,7 @@
                                         </div>
                                         <div class="col-md-3 member-task-count">
                                             <div class="text-warning fw-bold fs-5">
-                                                3
+                                                {{$task_statistics[$member_val->emp_id]['pending_tasks']}}
                                             </div>
                                             <div class="fs-12">
                                                 pending
@@ -68,13 +69,22 @@
                                     <div>
                                         <div class=" mt-4">
                                             <div class="row justify-content-between mb-1">
-                                                <div class="col-md-4 fs-12">Workload</div>
-                                                <div class="col-md-2 fs-12 text-success fw-bold">75%</div>
+                                                <div class="col-md-4 fs-12">Workload
+                                                    <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                          data-bs-title="(Pending / Active) * 100"
+                                                          data-bs-container="body"
+                                                          class="d-inline-flex align-middle">
+                                                        <iconify-icon icon="solar:info-circle-bold"
+                                                                      class="fs-14 text-info"></iconify-icon>
+                                                    </span>
+                                                </div>
+                                                <div class="col-md-2 fs-12 text-success fw-bold">{{$work_load}}%</div>
                                             </div>
                                             <div class="progress">
                                                 <div
                                                     class="progress-bar bg-success progress-bar-striped progress-bar-animated"
-                                                    role="progressbar" style="width: 75%" aria-valuenow="75"
+                                                    role="progressbar" style="width: {{$work_load}}%"
+                                                    aria-valuenow="{{$work_load}}"
                                                     aria-valuemin="0"
                                                     aria-valuemax="100"></div>
                                             </div>

@@ -18,6 +18,14 @@
     @if(!empty($all_projects))
         <div class="row">
             @foreach($all_projects as $project)
+                @php
+                    $total_tasks = count($project->tasks);
+                    $completed_tasks = $project->tasks->where('prt_status', \App\Enums\TaskStatus::COMPLETED->value)->count();
+                    $task_percentage = ($completed_tasks / $total_tasks) * 100;
+
+                    $project_task_assignees = $project->tasks->flatMap->projectTaskAssignments->map->projectTaskAssignTo
+                    ->filter()->unique('emp_id')->take(3)->pluck('emp_full_name')->values()->toArray();
+                @endphp
                 <div class="col-xl-4 col-lg-6">
                     @if(permission_can('projects', 'view'))
                         <a href="{{route('project.view', ['pro_id' => my_encrypt($project->pro_id)])}}" target="_self">
@@ -45,13 +53,17 @@
                                     <div>
                                         <div class="mt-2">
                                             <div class="row justify-content-between mb-1">
-                                                <div class="col-md-4 fs-12">18/24 Tasks</div>
-                                                <div class="col-md-2 fs-12 text-success fw-bold">75%</div>
+                                                <div class="col-md-4 fs-12">{{$completed_tasks}} / {{$total_tasks}}
+                                                    Tasks
+                                                </div>
+                                                <div class="col-md-2 fs-12 text-success fw-bold">{{$task_percentage}}%
+                                                </div>
                                             </div>
                                             <div class="progress">
                                                 <div
                                                     class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-                                                    role="progressbar" style="width: 75%" aria-valuenow="75"
+                                                    role="progressbar" style="width: {{$task_percentage}}%"
+                                                    aria-valuenow="{{$task_percentage}}"
                                                     aria-valuemin="0"
                                                     aria-valuemax="100"></div>
                                             </div>
@@ -60,12 +72,16 @@
                                     <div class="row justify-content-around mt-2">
                                         <div class="col-md-8">
                                             <div class="text-primary fw-bold fs-5">
-                                                8
+                                                @for($start = 0; $start < count($project_task_assignees); $start++)
+                                                    <span class="assignee-char">
+                                                        {{ get_initials_char($project_task_assignees[$start]) }}
+                                                    </span>
+                                                @endfor
                                             </div>
                                         </div>
                                         <div class="col-md-4 fs-12">
                                             <iconify-icon icon="solar:calendar-bold"
-                                                          class="align-middle fs-12"></iconify-icon> {{$project->pro_deadline}}
+                                                          class="align-middle fs-12"></iconify-icon> {{get_date_time_format($project->pro_deadline)}}
                                         </div>
                                     </div>
                                 </div>

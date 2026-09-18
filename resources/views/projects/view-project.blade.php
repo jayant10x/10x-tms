@@ -182,7 +182,7 @@
                                 <span class="mt-2">
                                     <iconify-icon icon="solar:calendar-broken"></iconify-icon>
                                 </span>
-                                <span class="fs-6 fw-medium">{{$project_data['pro_deadline']}}</span>
+                                <span class="fs-6 fw-medium">{{get_date_time_format($project_data['pro_deadline'])}}</span>
                             </div>
                         </div>
                         <div class="row mt-2">

@@ -76,3 +76,47 @@
     color: #ffffff;
     border: 1px solid #818285;
 }
+
+.assignee-char {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    max-width: 28px;
+
+    flex: 0 0 28px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #2f55c7;
+    color: #fff;
+
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+/* 1. Darken the main calendar outer border */
+/*.fc {
+    border: 2px solid #333 !important; !* Adjust color & thickness as needed *!
+    border-radius: 8px; !* Optional rounded corners *!
+    overflow: hidden;
+}*/
+
+/* 2. Darken internal day tile borders and grid lines */
+.fc td,
+.fc th,
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+    border-color: #6b819f !important; /* Dark grey grid lines */
+}
+
+/* 3. (Optional) Highlight specific day tiles on hover */
+.fc-daygrid-day:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}

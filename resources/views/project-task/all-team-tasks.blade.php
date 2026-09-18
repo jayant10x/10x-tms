@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'All Tasks','subTitle' => 'All Tasks'])
+@extends('layouts.vertical', ['title' => 'All Team Tasks','subTitle' => 'All Team Tasks'])
 
 @section('content')
     <div class="card">
@@ -30,20 +30,17 @@
                                 </td>
                                 <td>{{$task->project->pro_name}}</td>
                                 <td class="text-center">
-                                    {{--@php
-                                        $assignees_html = '<span>';
-                                        foreach ($task->assignees as $assignee){
-                                            $assignees_html.= '<p>'.$assignee.'</p>';
-                                        }
-                                        $assignees_html .= '</span>';
-                                    @endphp--}}
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top"
-                                          data-bs-title="{{$task->assignees}}"
-                                          data-bs-container="body"
-                                          class="d-inline-flex align-middle">
-                                        <iconify-icon icon="solar:info-circle-bold"
-                                                      class="fs-14 text-warning"></iconify-icon>
-                                    </span>
+                                    @php
+                                        $task_assignees = explode(',', $task->assignees);
+                                        $max_assignee_count = min(count($task_assignees), 2);
+                                    @endphp
+                                    @if(!empty($task_assignees))
+                                        @for($start = 0; $start < $max_assignee_count; $start++)
+                                            <span class="assignee-char">
+                                            {{ get_initials_char($task_assignees[$start]) }}
+                                        </span>
+                                        @endfor
+                                    @endif
                                 </td>
                                 <td><span
                                         class="badge badge-soft-{{$task->prt_priority?->color()}} badge-outline-{{$task->prt_priority?->color()}} rounded-pill me-1 fs-6"><iconify-icon
@@ -57,7 +54,7 @@
                                 <td>
                                     <div class="d-flex gap-2">
                                         @if(permission_can('all_tasks', 'view') || is_admin())
-                                            {!! generate_view_button(route('task.view', ['called_from'=> 'all_tasks', 'prt_id' => my_encrypt($task->prt_id), 'return_url' => url()->full()])) !!}
+                                            {!! generate_view_button(route('task.view', ['called_from'=> 'all_team_task', 'prt_id' => my_encrypt($task->prt_id), 'return_url' => url()->full()])) !!}
                                         @else
                                             -
                                         @endif

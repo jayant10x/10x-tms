@@ -46,6 +46,10 @@ $(document).ready(function () {
                     // Update current checklist text
                     let textNode = currentNode.siblings('.checklist-text');
                     textNode.toggleClass('checklist-completed', response.is_done);
+
+                    showNotification(response.message, 'success');
+                } else {
+                    showNotification(response.message, 'error');
                 }
             },
 

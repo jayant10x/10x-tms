@@ -61,6 +61,19 @@
         </div>
     @endforeach
 </div>
+<div>
+    Showing
+    {{ $project_team->firstItem() }}
+    to
+    {{ $project_team->lastItem() + 1 }}
+    of
+    {{ $project_team->total() + 1 }}
+    tasks
+</div>
+
+<div>
+    {{ $project_team->links() }}
+</div>
 {{--@else
     {!! generate_no_record_html() !!}
 @endif--}}

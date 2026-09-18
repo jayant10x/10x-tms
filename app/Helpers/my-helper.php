@@ -64,12 +64,13 @@ function generate_status_html($status) {
     }
 }
 
-function generate_no_record_html($message = ''): string {
-    return '<div class="p-3">
+function generate_no_record_html($message = '', $class = ''): string {
+    $message = !empty($message) ? $message : 'No Record Found.';
+    return '<div class="p-3' . $class . '">
                 <div class="alert alert-warning alert-icon text-center" role="alert">
                     <div class="d-flex align-items-center justify-content-center">
                         <i class="bx bx-info-circle text-amber-600"></i>
-                        <span class="p-1">No Record Found.</span>
+                        <span class="p-1">' . $message . '</span>
                     </div>
                 </div>
             </div>';

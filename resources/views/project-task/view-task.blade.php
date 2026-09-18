@@ -4,14 +4,15 @@
 @endsection
 @section('content')
     @php
-        $is_authorized_to_edit = permission_can('all_my_tasks', 'edit') || get_logged_in_user_role() == 'manager';
+        $all_permission = (get_logged_in_user_role() == \App\Enums\UserRoleEnum::MANAGER->value && permission_can('all_tasks', 'edit')) || is_admin();
+        $employee_permission = get_logged_in_user_role() == \App\Enums\UserRoleEnum::EMPLOYEE->value && permission_can('all_my_tasks', 'edit');
     @endphp
     <div class="row align-items-center">
         <div class="col-md-8">
             <span
                 style="font-size: 17px; font-weight: 450; color: #454446f2 !important;">{{$task_data->prt_title}}</span>
         </div>
-        @if($is_authorized_to_edit)
+        @if($all_permission || $employee_permission)
             <div class="col-md-4">
                 <div class="row justify-content-end">
                     <div class="col-md-8">
@@ -76,7 +77,7 @@
                             <div class="row mt-3 align-items-center justify-content-between" id="checklist-container">
                                 @foreach($task_data->subTasks as $sub_task)
                                     <div class="col-md-11 text-wrap pb-2">
-                                        @if($is_authorized_to_edit)
+                                        @if($all_permission || $employee_permission)
                                             <input type="checkbox" class="form-check-input text-dark checklist-item"
                                                    value="{{ my_encrypt($sub_task->pst_id) }}" {{ $sub_task->pst_is_done ? 'checked' : '' }}>
                                         @endif
@@ -85,7 +86,7 @@
                                         </span>
                                     </div>
 
-                                    @if($is_authorized_to_edit)
+                                    @if($all_permission)
                                         <div class="col-md-1 pb-2">
                                             <a href="javascript:void(0);" data-bs-toggle="tooltip"
                                                data-bs-placement="top"
@@ -99,7 +100,7 @@
                                     @endif
                                 @endforeach
                             </div>
-                            @if(permission_can('all_tasks', 'add'))
+                            @if($all_permission)
                                 <div class="row mb-1 mt-2">
                                     <div class="col-md-11">
                                         <input type="text" id="sub_task" class="form-control" autocomplete="off"
@@ -126,7 +127,8 @@
                         <div class="card-body">
                             <p class="text-dark fw-semibold fs-16 mb-0">
                                 <iconify-icon icon="solar:paperclip-bold" class="align-middle"></iconify-icon>
-                                Attachments ({{count($task_data->prt_attachments)}})
+                                Attachments
+                                ({{!empty($task_data->prt_attachments) ? count($task_data->prt_attachments) : 0}})
                                 <span data-bs-toggle="tooltip" data-bs-placement="top"
                                       data-bs-title="Maximum 10 files get uploaded."
                                       data-bs-container="body"
@@ -156,7 +158,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            @if($is_authorized_to_edit)
+                            @if($all_permission || $employee_permission)
                                 <div class="row">
                                     <div class="col-md-3">
                                         <input type="file" id="task_attachment" name="runtime_task_attachment"
@@ -300,20 +302,12 @@
     </div>
 @endsection
 @section('module-right-section')
-   {{-- @php
-        $back_to_list_url = 'all_my_tasks';
-        if ($section == 'all_tasks'){
-            $back_to_list_url = 'all_tasks';
-        }
-        if ($section == 'projects'){
-            $back_to_list_url = 'all_tasks';
-        }
-    @endphp--}}
-    {!! generate_back_to_list_button(url()->previous()) !!}
+    {!! generate_back_to_list_button(request('return_url', url()->previous())) !!}
 @endsection
 @push('script')
     <script>
         let task_id = '{{my_encrypt($task_data->prt_id)}}';
+        let is_admin = '{{is_admin()}}';
     </script>
     @vite(['resources/js/pages/tasks.js' ])
 @endpush

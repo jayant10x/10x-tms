@@ -51,7 +51,7 @@
                                 <td>
                                     <div class="d-flex gap-2">
                                         @if(permission_can('all_my_tasks', 'view'))
-                                            {!! generate_view_button(route('task.view', [/*'section'=> 'all-my-tasks',*/ 'prt_id' => my_encrypt($task->prt_id)])) !!}
+                                            {!! generate_view_button(route('task.view', ['called_from'=> 'all_my_tasks', 'prt_id' => my_encrypt($task->prt_id), 'return_url' => url()->full()])) !!}
                                         @endif
                                         {{--{!! generate_edit_button(route('employees.edit', ['emp_id' => my_encrypt($employee->emp_id)])) !!}
                                         {!! generate_delete_button(route('employees.list')) !!}--}}
@@ -76,7 +76,7 @@
                     {{ $all_assigned_to_me->lastItem() }}
                     of
                     {{ $all_assigned_to_me->total() }}
-                    employees
+                    tasks
                 </div>
 
                 <div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRoleEnum;
 use App\Models\ProjectSubTask;
 use Illuminate\Http\Request;
 
@@ -48,6 +49,10 @@ class ProjectSubTaskController extends Controller {
     }
 
     public function addSubTask(Request $request, $prt_id) {
+        if(get_logged_in_user_role() != UserRoleEnum::EMPLOYEE->value){
+            return response()->json(['status' => false, 'message' => 'You are not authorized to perform this action.'], 403);
+        }
+
         $prt_id = my_decrypt($prt_id);
         $sub_task = trim($request->sub_task);
 
