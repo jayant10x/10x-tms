@@ -11,7 +11,7 @@
     @endphp
     <div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 mb-sm-3">
                 <div class="mini-card card-purple">
 
                     <div class="mini-icon">
@@ -28,7 +28,7 @@
 
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mb-sm-3">
                 <div class="mini-card card-yellow">
                     <div class="mini-icon">
                         <i class="ri-calendar-schedule-line"></i>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mb-sm-3">
                 <div class="mini-card card-pink">
                     <div class="mini-icon">
                         <i class="bi bi-fire"></i>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mb-sm-3">
                 <div class="mini-card card-green">
                     <div class="mini-icon">
                         <i class="bi bi-people"></i>
