@@ -12,6 +12,7 @@ use App\Http\Controllers\ProjectSubTaskController;
 use App\Http\Controllers\ProjectTaskController;
 use App\Http\Controllers\TeamMembersController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,7 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-profile/edit', [MyProfileController::class, 'editProfile'])->name('my_profile.edit');
     Route::put('/my-profile/update/personal-info', [MyProfileController::class, 'updateProfilePersonalInfo'])->name('my_profile.update.personal_info');
     Route::put('/my-profile/update/credentials-info', [MyProfileController::class, 'updateProfileCredentials'])->name('my_profile.update.credentials');
-    Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
 
     Route::get('admin-users', [AdminUserController::class, 'allAdminUsers'])->middleware('permission:admin_users.view')->name('admin_user_module.list');
     Route::get('admin-user/add', [AdminUserController::class, 'addAdmin'])->middleware('permission:admin_user.add')->name('admin_user_module.add');
@@ -93,3 +94,23 @@ Route::middleware('auth')->group(function () {
     Route::get('team-tasks', [ProjectTaskController::class, 'teamTasks'])->middleware('permission:team_tasks.view|team_tasks.edit')->name('all_team_tasks');
     Route::get('my-tasks', [ProjectTaskController::class, 'myTasks'])->middleware('permission:my_tasks.view|my_tasks.edit')->name('my_tasks');
 });
+Route::post('/employee/panel-status', function (Request $request) {
+    if (!auth()->check()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthenticated'
+        ], 401);
+    }
+
+    auth()->user()->updateQuietly([
+        'adm_panel_active' => $request->boolean('active'),
+        'adm_panel_last_seen_at' => now(),
+        'adm_last_activity_at' => now(),
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'active' => $request->boolean('active')
+    ]);
+
+})->middleware('auth');

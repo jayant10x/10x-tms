@@ -120,3 +120,27 @@
 .fc-daygrid-day:hover {
     background-color: rgba(0, 0, 0, 0.04);
 }
+
+
+/* Live pulse animation ring for online state */
+.status-pulse-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: inherit;
+    animation: badge-status-pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes badge-status-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}

@@ -7,24 +7,29 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/scss/app.scss',
-                'resources/js/app.js'
-                /*// css
+                // css
                 'resources/scss/app.scss',
                 'resources/scss/icons.scss',
                 'node_modules/swiper/swiper-bundle.min.css',
                 'node_modules/nouislider/dist/nouislider.min.css',
                 'node_modules/choices.js/public/assets/styles/choices.min.css',
                 'node_modules/swiper/swiper-bundle.min.css',
-                'node_modules/fullcalendar/main.min.css',
-                'node_modules/gridjs/dist/theme/mermaid.min.css',
+                // 'node_modules/fullcalendar/main.min.css',
+                // 'node_modules/gridjs/dist/theme/mermaid.min.css',
                 'node_modules/flatpickr/dist/flatpickr.min.css',
                 'node_modules/quill/dist/quill.snow.css',
                 'node_modules/quill/dist/quill.bubble.css',
                 'node_modules/swiper/swiper-bundle.min.css',
+                'resources/css/project.css',
+                'resources/css/tasks.css',
+                'resources/css/team-members.css',
 
                 // js
                 'resources/js/app.js',
+                'resources/js/pages/project-task-form.js',
+                'resources/js/pages/projects.js',
+                'resources/js/pages/employee.js',
+                'resources/js/pages/my-profile.js',
                 'resources/js/config.js',
                 'resources/js/layout.js',
                 'resources/js/pages/dashboard-analytics.js',
@@ -41,8 +46,9 @@ export default defineConfig({
                 'resources/js/pages/app-calendar.js',
                 'resources/js/pages/coming-soon.js',
                 'resources/js/pages/widgets.js',
-                'resources/js/components/maps-google.js',
-                'resources/js/components/maps-vector.js',
+                'resources/js/pages/calendar.js',
+                // 'resources/js/components/maps-google.js',
+                /*'resources/js/components/maps-vector.js',
                 'resources/js/components/maps-canada.js',
                 'resources/js/components/maps-iraq.js',
                 'resources/js/components/maps-russia.js',
@@ -50,9 +56,9 @@ export default defineConfig({
                 'resources/js/components/table-gridjs.js',
                 'resources/js/components/form-clipboard.js',
                 'resources/js/components/form-flatepicker.js',
-                'resources/js/components/form-wizard.js',
+                'resources/js/components/form-wizard.js',*/
                 'resources/js/components/form-fileupload.js',
-                'resources/js/components/form-quilljs.js',
+                /*'resources/js/components/form-quilljs.js',
                 'resources/js/components/form-slider.js',
                 'resources/js/components/apexchart-area.js',
                 'resources/js/components/apexchart-bar.js',
@@ -70,7 +76,7 @@ export default defineConfig({
                 'resources/js/components/apexchart-radialbar.js',
                 'resources/js/components/apexchart-scatter.js',
                 'resources/js/components/apexchart-polar-area.js',
-                'resources/js/components/extended-rating.js',
+                // 'resources/js/components/extended-rating.js',
                 'resources/js/components/extended-sweetalert.js'*/
             ],
             refresh: true,
@@ -85,7 +91,7 @@ export default defineConfig({
     server: {
         /*host: '0.0.0.0', // Allows network devices to access the Vite dev server
         hmr: {
-            host: '192.168.1.45', // Change to your actual machine LAN IP
+            host: 'http://localhost:8000', // Change to your actual machine LAN IP
         },*/
         watch: {
             ignored: ['**/storage/framework/views/**'],

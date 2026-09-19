@@ -22,9 +22,18 @@ class AdminUser extends Authenticatable {
         'adm_user_name',
         'adm_role',
         'adm_password',
+        'adm_panel_active',
+        'adm_panel_last_seen_at',
+        'adm_last_activity_at',
     ];
     protected $hidden = [
         'adm_password',
+    ];
+
+    protected $casts = [
+        'adm_panel_active' => 'boolean',
+        'adm_panel_last_seen_at' => 'datetime',
+        'adm_last_activity_at' => 'datetime',
     ];
 
     protected function admPassword(): Attribute {

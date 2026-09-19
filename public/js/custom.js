@@ -192,3 +192,51 @@ $(document).ready(function () {
 function escapeHtml(text) {
     return $('<div>').text(text).html();
 }
+
+let heartbeatInterval;
+
+function sendPanelStatus(active) {
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    if (!csrfToken) {
+        console.error('CSRF token not found');
+        return;
+    }
+
+    fetch('/employee/panel-status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            active: active
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            // console.log(data);
+        })
+        .catch(error => {
+            console.error('Panel status error:', error);
+        });
+}
+
+// When page/tab is visible
+function updateVisibility() {
+    const active = !document.hidden;
+    sendPanelStatus(active);
+    if (active) {
+        clearInterval(heartbeatInterval);
+        heartbeatInterval = setInterval(() => {
+            sendPanelStatus(true);
+        }, 30000);
+    } else {
+        clearInterval(heartbeatInterval);
+    }
+}
+
+document.addEventListener('visibilitychange', updateVisibility);
+updateVisibility();

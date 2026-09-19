@@ -11,13 +11,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class TeamMembersController extends Controller {
     public function index() {
         if (is_admin()) {
-            $all_team_members = Employee::query()->select('emp_id', 'emp_internal_id', 'emp_full_name', 'emp_email', 'emp_designation', 'emp_department', 'emp_sub_department', 'emp_joining_date', 'emp_status', 'emp_photo')->where('emp_status', '=', 1)->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
+            $all_team_members = Employee::query()->with('admin_user_details')->select('emp_id', 'emp_internal_id', 'emp_full_name', 'emp_email', 'emp_designation', 'emp_department', 'emp_sub_department', 'emp_joining_date', 'emp_status', 'emp_photo')->where('emp_status', '=', 1)->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
         } else {
             $employees = get_employee_children_in_depth((int)get_logged_in_user_emp_id());
             $employee_ids = array_column($employees, 'emp_id');
             $employee_ids[] = get_logged_in_user_emp_id();
 
-            $all_team_members = Employee::query()->select('emp_id', 'emp_internal_id', 'emp_full_name', 'emp_email', 'emp_designation', 'emp_department', 'emp_sub_department', 'emp_joining_date', 'emp_status', 'emp_photo')
+            $all_team_members = Employee::query()->with('admin_user_details')->select('emp_id', 'emp_internal_id', 'emp_full_name', 'emp_email', 'emp_designation', 'emp_department', 'emp_sub_department', 'emp_joining_date', 'emp_status', 'emp_photo')
                 ->where('emp_status', '=', 1)
                 ->whereIn('emp_id', $employee_ids)
                 ->paginate(config('constants.PER_PAGE_ITEM_COUNT'))

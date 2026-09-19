@@ -158,6 +158,14 @@
                         </div>
                     @endif
                     <!-- User -->
+                    <div class="user-info overflow-hidden ms-3">
+                        <h6 class="mb-0 text-truncate text-dark fw-semibold fs-14">
+                            {{ implode(' ', array_slice(explode(' ', trim(Auth::user()->adm_name ?? '')), 0, 2)) }}
+                        </h6>
+                        <small class="text-info text-truncate d-block fs-12">
+                            {{ \App\Enums\UserRoleEnum::from(Auth::user()->adm_role ?? '')->label() }}
+                        </small>
+                    </div>
                     <div class="dropdown topbar-item">
                         <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
@@ -172,6 +180,7 @@
                             @endphp
                             <span class="d-flex align-items-center">
                                    <img class="rounded-circle" width="32" height="32" src="{{$profile_pic}}">
+                                 {!! user_online_status_dot(Auth::user()->adm_id, 'width: 10px !important; height: 10px !important; bottom: 7px; right: 7px;') !!}
                               </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
@@ -196,11 +205,19 @@
 --}}
                             <div class="dropdown-divider my-1"></div>
 
-                            <a class="dropdown-item text-danger" href="{{ route('logout')}}">
+
+                            <a href="javascript:void(0);"
+                               class="dropdown-item text-danger"
+                               onclick="if (confirm('Are you sure you want to logout?')) { document.getElementById('logout-form').submit(); }">
                                 <iconify-icon icon="solar:logout-3-broken"
                                               class="align-middle me-2 fs-18"></iconify-icon>
                                 <span class="align-middle">Logout</span>
                             </a>
+
+                            <!-- Hidden POST Form for Laravel -->
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         </div>
                     </div>
                 </div>

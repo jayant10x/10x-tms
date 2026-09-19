@@ -19,6 +19,9 @@ return new class extends Migration {
             $table->string($this->_pre_col . 'password');
             $table->boolean($this->_pre_col . 'status')->default(1)->comment('1 - Active, 0 - Inactive');
             $table->string($this->_pre_col . 'photo')->nullable();
+            $table->timestamp($this->_pre_col . 'last_activity_at')->nullable();
+            $table->timestamp($this->_pre_col . 'panel_last_seen_at')->nullable();
+            $table->boolean($this->_pre_col . 'panel_active')->default(false);
             get_created_updated_by_db_column($table, $this->_pre_col);
         });
     }

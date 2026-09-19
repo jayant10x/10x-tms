@@ -11,8 +11,7 @@ return new class extends Migration {
 
     private $_pre_col = 'emp_';
 
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('employees', function (Blueprint $table) {
             $table->bigInteger($this->_pre_col . 'id')->unsigned()->autoIncrement();
             $table->string($this->_pre_col . 'internal_id', 10)->unique();
@@ -34,8 +33,7 @@ return new class extends Migration {
         });
     }
 
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('employees');
     }
 };

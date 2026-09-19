@@ -21,15 +21,18 @@
                 <div class="col-md-10">
                     <div class="row">
                         <div class="col-md-2">
-                            @if(!empty($member_info['emp_photo']))
-                                <a href="{{$member_photo}}" target="_blank">
-                                    @endif
-                                    <img src="{{$member_photo}}"
-                                         class="avatar-lg rounded-3 border border-light border-3"
-                                         style="height: 120px; width: 120px; border-radius: 50% !important;">
-                                    @if(!empty($member_info['emp_photo']))
-                                </a>
-                            @endif
+                            <div class="position-relative d-inline-block">
+                                @if(!empty($member_info['emp_photo']))
+                                    <a href="{{$member_photo}}" target="_blank">
+                                        @endif
+                                        <img src="{{$member_photo}}"
+                                             class="avatar-lg rounded-3 border border-light border-3"
+                                             style="height: 120px; width: 120px; border-radius: 50% !important;">
+                                        @if(!empty($member_info['emp_photo']))
+                                    </a>
+                                @endif
+                                    {!! user_online_status_dot($member_info['admin_user_details']['adm_id']) !!}
+                            </div>
                         </div>
                         <div class="col-md-10 align-content-center">
                             <div class="row">
@@ -47,7 +50,10 @@
                     </div>
                 </div>
                 <div class="col-md-2 text-end align-content-center">
-                    {!! \App\Enums\UserRoleEnum::tryFrom($member_info['admin_user_details']['adm_role'])->badge() !!}
+                    <div class="mb-2">
+                        {!! \App\Enums\UserRoleEnum::tryFrom($member_info['admin_user_details']['adm_role'])->badge() !!}
+                    </div>
+                    {!! user_online_status_badge($member_info['admin_user_details']['adm_id']) !!}
                 </div>
             </div>
         </div>

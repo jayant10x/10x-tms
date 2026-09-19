@@ -15,7 +15,7 @@
                 @php
                     $emp_photo = asset('images/users/dummy-avatar.jpg');
                     if(!empty($member_val['emp_photo'])) {
-                        $emp_photo = asset('storage/employees/'. $member_val['emp_photo']);
+                        $emp_photo = asset('storage/employees/'. $member_val->emp_photo);
                     }
 
                     $work_load = $task_statistics[$member_val->emp_id]['total_tasks'] > 0 ? ($task_statistics[$member_val->emp_id]['pending_tasks'] / $task_statistics[$member_val->emp_id]['total_tasks']) * 100 : 0;
@@ -28,8 +28,12 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap align-items-center gap-2 pb-3">
-                                        <img src="{{$emp_photo}}"
-                                             class="avatar-lg rounded-3 border border-light border-3">
+                                        <div class="position-relative d-inline-block">
+                                            <img src="{{$emp_photo}}"
+                                                 class="avatar-lg rounded-3 border border-light border-3"
+                                                 style="height: 80px; width: 80px; object-fit: cover;">
+                                            {!! user_online_status_dot($member_val->admin_user_details->adm_id, 'bottom: 0px; right: -3px;') !!}
+                                        </div>
                                         <div class="d-block">
                                             <p class="text-dark fw-medium fs-16 mb-0">{{$member_val->emp_full_name}}</p>
                                             <p class="mb-0">{{$member_val->emp_email}}</p>
