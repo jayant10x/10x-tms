@@ -39,6 +39,7 @@ Thumbs.db
 # Laravel / local development
 Homestead.json
 Homestead.yaml
+/coding-environment/
 
 # Temporary files
 *.tmp

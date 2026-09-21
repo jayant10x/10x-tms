@@ -162,7 +162,7 @@ if (!function_exists('user_online_status')) {
         // Panel is currently active
         $isPanelActive = !empty($details->adm_panel_active)
             && !empty($details->adm_panel_last_seen_at)
-            && Carbon::parse($details->adm_panel_last_seen_at)->gt(now()->subSeconds(60));
+            && Carbon::parse($details->adm_panel_last_seen_at)->gt(now()->subSeconds(PANEL_ACTIVE_DURATION));
 
         if ($isPanelActive) {
             return [
@@ -178,7 +178,7 @@ if (!function_exists('user_online_status')) {
 
         // User is logged in but panel is not active
         $isLoggedIn = !empty($details->adm_last_activity_at)
-            && Carbon::parse($details->adm_last_activity_at)->gt(now()->subMinutes(2));
+            && Carbon::parse($details->adm_last_activity_at)->gt(now()->subMinutes(IS_LOGGED_CHECK_DURATION));
 
         if ($isLoggedIn) {
             return [
