@@ -3,10 +3,10 @@
  * Author: Techzaa
  * Module/App: Main Js
  */
-import $ from 'jquery';
+/*import $ from 'jquery';
 
 window.$ = $;
-window.jQuery = $;
+window.jQuery = $;*/
 
 import * as bootstrap from 'bootstrap';
 

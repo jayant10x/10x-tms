@@ -14,11 +14,11 @@
                                 <thead class="table-light">
                                 <tr>
                                     <th width="5%">Sr. no.</th>
-                                    <th width="20%">Admin Photo & Name</th>
+                                    <th width="30%">Admin Photo & Name</th>
                                     <th width="10%">Username</th>
                                     <th width="10%">Status</th>
-                                    <th width="15%">Created On</th>
-                                    <th width="20%">Action</th>
+                                    <th width="20%">Created On</th>
+                                    <th width="10%" class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -50,12 +50,10 @@
                                         <td>{{$user->adm_user_name}}</td>
                                         <td>{!! generate_status_html($user->adm_status) !!}</td>
                                         <td>{{get_date_time_format($user->adm_created_on)}}</td>
-                                        <td>
-                                            <div class="d-flex gap-2">
-                                                {!! generate_view_button(route('admin_user_module.view', ['adm_id' => my_encrypt($user->adm_id)])) !!}
-                                                {!! generate_edit_button(route('admin_user_module.edit', ['adm_id' => my_encrypt($user->adm_id)])) !!}
-                                                {!! generate_delete_button(route('employees.list')) !!}
-                                            </div>
+                                        <td class="text-center">
+                                            {!! generate_view_button(route('admin_user_module.view', ['adm_id' => my_encrypt($user->adm_id)])) !!}
+                                            {!! generate_edit_button(route('admin_user_module.edit', ['adm_id' => my_encrypt($user->adm_id)])) !!}
+                                            {!! generate_delete_button(route('employees.list')) !!}
                                         </td>
                                     </tr>
                                 @endforeach

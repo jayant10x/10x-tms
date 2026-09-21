@@ -18,7 +18,7 @@
                 <h2 class="fw-bold text-uppercase text-center fs-18">Sign In</h2>
 
                 <div class="px-4">
-                    <form method="POST" action="{{ route('login') }}" class="authentication-form">
+                    <form method="POST" action="{{ route('login') }}" class="authentication-form" id="login_form">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label" for="login_user_name">Username <span
@@ -60,3 +60,32 @@
         </p>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(document).ready(function () {
+            $('#login_form').validate({
+                rules: {
+                    adm_user_name: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 20,
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8,
+                        maxlength: 20,
+                    },
+                },
+                messages: {
+                    adm_user_name: {
+                        required: 'Username is required.'
+                    },
+                    password: {
+                        required: 'Password is required.'
+                    },
+                }
+            });
+        });
+    </script>
+@endpush

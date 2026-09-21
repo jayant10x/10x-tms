@@ -4,7 +4,8 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="mb-3">
-                <label for="profile_user_name" class="form-label">User Name</label>
+                <label for="profile_user_name" class="form-label">User Name <span
+                        class="text-danger">*</span></label>
                 <input type="text" id="profile_user_name" name="user_name"
                        class="form-control @error('profile_user_name') is-invalid @enderror"
                        autocomplete="off"
@@ -16,7 +17,8 @@
         </div>
         <div class="col-lg-6">
             <div class="mb-3">
-                <label for="profile_password" class="form-label">Password</label>
+                <label for="profile_password" class="form-label">Password <span
+                        class="text-danger">*</span></label>
                 <input type="password" id="profile_password" name="password"
                        class="form-control @error('password') is-invalid @enderror"
                        autocomplete="off">

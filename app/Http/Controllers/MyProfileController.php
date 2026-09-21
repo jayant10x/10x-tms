@@ -62,7 +62,7 @@ class MyProfileController extends Controller {
         $emp_id = get_logged_in_user_emp_id();
         $request->validate([
             'full_name' => 'required|min:' . MIN_LENGTH . '|max:' . MAX_LENGTH_100,
-            'phone_number' => 'required|numeric',
+            'phone_number' => 'nullable|numeric',
             'email' => 'required|email',
             'employee_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);

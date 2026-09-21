@@ -162,7 +162,7 @@ class ProjectTaskController extends Controller {
             'task_tags_hid' => 'nullable|array|min:1',
             'task_tags_hid.*' => 'string|min:' . MIN_LENGTH . '|max:' . MAX_LENGTH_50,
             'sub_task_hid' => 'nullable|array|min:1',
-            'sub_task_hid.*' => 'string|min:' . MIN_LENGTH . '|max:' . MAX_LENGTH_50,
+            'sub_task_hid.*' => 'string|min:' . MIN_LENGTH . '|max:' . MAX_LENGTH,
             'desc' => 'nullable|string|min:' . MIN_LENGTH_10 . '|max:' . MAX_LENGTH_2000,
             'attachments' => 'nullable|array|max:10',
             'attachments.*' => 'file|mimes:jpeg,jpg,png,pdf|max:3072', // restricted to 3MB

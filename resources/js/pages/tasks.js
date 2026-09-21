@@ -1,4 +1,4 @@
-import $ from 'jquery';
+// import $ from 'jquery';
 
 $(document).ready(function () {
     let _subTaskNode = $('#sub_task');
@@ -221,7 +221,6 @@ $(document).ready(function () {
     $(document).on('click', '#upload-task-attachment', function () {
         $('#task_attachment').trigger('click');
     });
-
 
     $(document).on('change', '#task_attachment', function () {
         let file = this.files[0];

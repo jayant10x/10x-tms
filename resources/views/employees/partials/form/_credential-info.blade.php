@@ -20,8 +20,8 @@
         </div>
         <div class="col-lg-4">
             <div class="mb-3">
-                <label for="role" class="form-label">Role{{-- <span
-                                            class="text-danger">*</span>--}}</label>{{----}}
+                <label for="role" class="form-label">Role <span
+                                            class="text-danger">*</span></label>
                 <select class="form-control @error('role') is-invalid @enderror"
                         id="role" data-choices data-choices-sorting-false
                         data-placeholder="Select Role" name="role">
@@ -55,3 +55,7 @@
     </div>
     {!! generate_submit_reset_button() !!}
 </form>
+
+<script>
+    let hasPassword = '{{isset($admin_data) && !empty($admin_data->adm_password) ? true: false}}';
+</script>

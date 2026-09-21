@@ -18,7 +18,7 @@
         <div class="card-body">
             <form
                 action="{{$mode == 'edit' ? route('admin_user_module.update', ['adm_id' => my_encrypt($admin_data->adm_id)]) : route('admin_user_module.store')}}"
-                method="post" id="employee_add_edit_form" enctype="multipart/form-data">
+                method="post" id="admin_add_edit_form" enctype="multipart/form-data">
                 @csrf
                 @if($mode == 'edit')
                     @method('PUT')
@@ -179,6 +179,59 @@
                         pond.browse();
                     });
                 }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#admin_add_edit_form').validate({
+                ignore: [],
+                rules: {
+                    admin_name: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 100,
+                    },
+                    user_name: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 20,
+                    },
+                    status: {
+                        required: true,
+                    },
+                    password: {
+                        required: function () {
+                            return @json($mode !== 'edit');
+                        },
+                        minlength: function () {
+                            // Enforce minlength in 'add' mode OR if user typed something in 'edit' mode
+                            var mode = @json($mode);
+                            var passwordVal = $('#password').val();
+                            return (mode !== 'edit' || passwordVal.length > 0) ? 8 : false;
+                        },
+                        maxlength: 20
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    if (element.is("select")) {
+                        var choicesContainer = element.closest(".choices");
+                        if (choicesContainer.length) {
+                            error.insertAfter(choicesContainer);
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    }
+                    // 3. STANDARD INPUTS
+                    else {
+                        error.insertAfter(element);
+                    }
+                },
+            })
+        });
+
+        document.querySelectorAll('select').forEach(function (selectElement) {
+            selectElement.addEventListener('change', function () {
+                $(this).valid(); // Clear validation error instantly upon selecting an option
             });
         });
     </script>

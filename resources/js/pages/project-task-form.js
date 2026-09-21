@@ -31,7 +31,19 @@
                 window.initFlatpickr(element, {
                     altInput: true,
                     altFormat: 'F j, Y',
-                    dateFormat: 'Y-m-d'
+                    dateFormat: 'Y-m-d',
+                    onChange: function (selectedDates, dateStr, instance) {
+                        $(instance.element).valid(); // Force validate on selection
+                    },
+                    onClose: function (selectedDates, dateStr, instance) {
+                        $(instance.element).valid(); // Force validate when picker closes
+                    },
+                    onReady: function (selectedDates, dateStr, instance) {
+                        // Ensure the visible alt input triggers validation on keyup/clear
+                        $(instance.altInput).on('blur keyup', function () {
+                            $(instance.element).valid();
+                        });
+                    }
                 });
             });
         }

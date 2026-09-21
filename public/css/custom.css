@@ -144,3 +144,10 @@
         opacity: 0;
     }
 }
+
+label.error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block; /* Forces the error to sit neatly under the input */
+}

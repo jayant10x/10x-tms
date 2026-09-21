@@ -128,4 +128,24 @@ class AjaxController extends Controller {
     private function getTaskViewViaAjax($mode, $primary_id) {
         return ['data' => '<h1>Task View Comes from Ajax Controller.</h1>', 'secondary_data' => 'View Task'];
     }
+
+    public function checkUniqueEmpInternalId(Request $request) {
+        $mode = my_decrypt($request->mode, true);
+        $isExistQuery = Employee::query()->where('emp_internal_id', '=', $request->internal_id);
+        if ($mode == 'edit') {
+            $isExistQuery->where('emp_id', '!=', my_decrypt($request->emp_id));
+        }
+        $isExist = $isExistQuery->exists();
+        return response()->json(!$isExist);
+    }
+
+    public function checkUniqueEmpEmail(Request $request) {
+        $mode = my_decrypt($request->mode, true);
+        $isExistQuery = Employee::query()->where('emp_email', '=', $request->email_id);
+        if ($mode == 'edit') {
+            $isExistQuery->where('emp_id', '!=', my_decrypt($request->emp_id));
+        }
+        $isExist = $isExistQuery->exists();
+        return response()->json(!$isExist);
+    }
 }

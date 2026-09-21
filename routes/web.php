@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/employees-reporting-to', [AjaxController::class, 'getReportingToEmployees'])->middleware('permission:employees.add|employees.edit')->name('reporting_to_employees');
     Route::get('/show-modal-popup/add-edit', [AjaxController::class, 'getAddEditPopUpForms']);
     Route::get('/show-modal-popup/view', [AjaxController::class, 'getViewPopUpsPage']);
+    Route::get('/check-unique-emp-internal-id', [AjaxController::class, 'checkUniqueEmpInternalId'])->name('check_unique_emp_internal_id_via_ajax');
+    Route::get('/check-unique-emp-email', [AjaxController::class, 'checkUniqueEmpEmail'])->name('check_unique_emp_email_via_ajax');
 
     Route::get('/notifications/{notification}/handle', [NotificationController::class, 'handle']
     )->name('notifications.handle');
@@ -65,9 +67,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
 
     Route::get('admin-users', [AdminUserController::class, 'allAdminUsers'])->middleware('permission:admin_users.view')->name('admin_user_module.list');
-    Route::get('admin-user/add', [AdminUserController::class, 'addAdmin'])->middleware('permission:admin_user.add')->name('admin_user_module.add');
+    Route::get('admin-user/add', [AdminUserController::class, 'addAdmin'])->middleware('permission:admin_users.add')->name('admin_user_module.add');
     Route::post('admin-user/store', [AdminUserController::class, 'saveAdmin'])->middleware('permission:admin_users.add')->name('admin_user_module.store');
-    Route::get('admin-user/edit/{adm_id}', [AdminUserController::class, 'editAdmin'])->middleware('permission:admin_user.edit')->name('admin_user_module.edit');
+    Route::get('admin-user/edit/{adm_id}', [AdminUserController::class, 'editAdmin'])->middleware('permission:admin_users.edit')->name('admin_user_module.edit');
     Route::put('admin-user/update-admin/{adm_id}', [AdminUserController::class, 'updateAdmin'])->middleware('permission:admin_users.edit')->name('admin_user_module.update');
     Route::get('admin-user/view-admin/{adm_id}', [AdminUserController::class, 'viewAdmin'])->middleware('permission:admin_users.view')->name('admin_user_module.view');
 
