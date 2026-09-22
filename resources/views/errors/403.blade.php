@@ -117,12 +117,13 @@
         .error-image {
             display: block;
 
-            width: 100%;
+            width: 65%;
             max-width: 650px;
 
             height: auto;
 
             margin: 0 auto 10px;
+            margin-bottom: 50px !important;
         }
 
         /*

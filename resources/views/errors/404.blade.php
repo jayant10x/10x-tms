@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>403 - Unauthorized Access</title>
+    <title>404 - Page Not Found</title>
 
     <style>
         * {
@@ -117,13 +117,12 @@
         .error-image {
             display: block;
 
-            width: 100%;
+            width: 65%;
             max-width: 650px;
 
             height: auto;
 
-            margin: 0 auto 10px;
-            margin-bottom: -35px !important;
+            margin: -60px auto -25px;
         }
 
         /*
@@ -196,6 +195,7 @@
 
             .error-image {
                 max-width: 520px;
+                margin-bottom: 0;
             }
 
             .dashboard-button {
@@ -209,6 +209,7 @@
 
             .error-image {
                 max-width: 360px;
+                margin-bottom: 0;
             }
 
             .dashboard-button {
