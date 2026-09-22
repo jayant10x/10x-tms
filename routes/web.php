@@ -116,4 +116,5 @@ Route::post('/employee/panel-status', function (Request $request) {
     ]);
 
 // NEw Chnages
+//    Another Changes
 })->middleware('auth');
