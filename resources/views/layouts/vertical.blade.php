@@ -18,10 +18,10 @@
         <div class="container-fluid">
 
             {{--@include("layouts.partials/page-title",['title' => $title,'subTitle' => $subTitle])--}}
-            <div class="row">
+            <div class="row mb-2">
                 <div class="col-12">
-                    <div class="page-title-box">
-                        <h4 class="mb-0 fw-semibold">{{ $title }}</h4>
+                    <div class="page-title-box justify-content-end">
+                        {{--<h4 class="mb-0 fw-semibold">{{ $title }}</h4>--}}
                         @yield('module-right-section')
                         {{--<ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">{{ $subTitle }}</a></li>

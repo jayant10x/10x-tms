@@ -10,6 +10,8 @@
                         </button>
                     </div>
 
+                    <h4 class="mb-0 fw-bold text-dark ms-2">{{ strtoupper($title) }}</h4>
+
                     <!-- App Search-->
                     {{--<form class="app-search d-none d-md-block me-auto">
                          <div class="position-relative">
@@ -18,7 +20,6 @@
                          </div>
                     </form>--}}
                 </div>
-
                 <div class="d-flex align-items-center gap-1">
                     <!-- Theme Color (Light/Dark) -->
                     {{--<div class="topbar-item">

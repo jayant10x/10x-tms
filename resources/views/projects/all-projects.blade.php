@@ -21,7 +21,7 @@
                 @php
                     $total_tasks = count($project->tasks);
                     $completed_tasks = $project->tasks->where('prt_status', \App\Enums\TaskStatus::COMPLETED->value)->count();
-                    $task_percentage = ($completed_tasks / $total_tasks) * 100;
+                    $task_percentage = $total_tasks > 0 ? ($completed_tasks / $total_tasks) * 100 : 0;
 
                     $project_task_assignees = $project->tasks->flatMap->projectTaskAssignments->map->projectTaskAssignTo
                     ->filter()->unique('emp_id')->take(3)->pluck('emp_full_name')->values()->toArray();
