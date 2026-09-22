@@ -23,6 +23,7 @@ class AdminUserController extends Controller {
             'password' => 'required_with:user_name|min:8|max:' . MAX_LENGTH_20,
             'role' => 'required',
         ]);
+//       /ssssss
 
         $current_date = date(config('constants.DB_DATE_TIME_FORMAT'));
         $emp_data = Employee::query()->where('emp_id', '=', $emp_id)->first();
