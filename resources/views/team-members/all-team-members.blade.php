@@ -9,7 +9,7 @@
             border-radius: 8px;
         }
     </style>
-    @if(!empty($all_team_members))
+    @if(!empty($all_team_members) && count($all_team_members)>0)
         <div class="row">
             @foreach($all_team_members as $member_val)
                 @php
@@ -103,6 +103,10 @@
             @endforeach
         </div>
     @else
-        {!! generate_no_record_html() !!}
+        <div class="card">
+            <div class="card-body p-0">
+                {!! generate_no_record_html() !!}
+            </div>
+        </div>
     @endif
 @endsection
