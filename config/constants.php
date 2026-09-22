@@ -10,4 +10,6 @@ return [
         'manager' => 'Manager',
         'employee' => 'Employee',
     ],
+
+    'DEFAULT_DEPTH' => 3,
 ];

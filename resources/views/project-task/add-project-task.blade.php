@@ -142,7 +142,40 @@
             <div class="mb-3">
                 <label class="form-label">Assign To <span class="text-danger">*</span></label>
                 <div class="border rounded p-2" style="max-height: 145px; overflow-y: auto;" id="assign_to_container">
-                    <div class="row g-2">
+                    <div class="row g-2" style="max-height: 120px !important;overflow-y: auto; overflow-x: hidden;">
+                        <div class="col-md-12">
+                            <input type="text" id="assignees_search" class="form-control" autocomplete="off"
+                                   value="" placeholder="Search Assignee........">
+                        </div>
+                        @if(get_logged_in_user_role() == \App\Enums\UserRoleEnum::MANAGER->value)
+                            @php
+                                $manager_details = get_logged_in_user_employee_data();
+                            @endphp
+                            <div class="col-md-6">
+                                <label class="d-flex align-items-center gap-2 border rounded p-2 bg-light mb-0 w-100"
+                                       style="cursor: pointer;">
+                                    <input type="checkbox" class="form-check-input flex-shrink-0" name="assign_to[]"
+                                           value="{{ $manager_details['emp_id'] }}">
+
+                                    {{-- Avatar --}}
+                                    <span
+                                        class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0"
+                                        style="width: 25px; height: 25px; font-size: 10px;">
+                                    {{ get_initials_char($manager_details['emp_full_name']) }}
+                                </span>
+
+                                    {{-- Employee Details --}}
+                                    <span class="d-flex flex-column lh-sm overflow-hidden">
+                                    <span class="fw-medium text-dark text-truncate">
+                                        {{ $manager_details['emp_full_name'] }}
+                                    </span>
+                                    <small class="text-muted text-truncate">
+                                        {{$manager_details['emp_designation']->label()}}
+                                    </small>
+                                </span>
+                                </label>
+                            </div>
+                        @endif
                         @foreach($team_members as $assignee)
                             <div class="col-md-6">
                                 <label class="d-flex align-items-center gap-2 border rounded p-2 bg-light mb-0 w-100"
@@ -249,7 +282,7 @@
                     </span>
                 </label>
                 <input class="form-control" type="file" id="attachments" name="attachments[]"
-                       accept=".jpg, .jpeg, .png, .pdf" multiple>
+                       accept="image/jpg, image/jpeg, image/png, application/pdf" multiple>
                 @error('attachments')
                 <span class="validation-message">
                     {{ $message }}
@@ -431,7 +464,8 @@
                 },
                 due_date: {
                     required: true,
-                    dateISO: true
+                    dateISO: true,
+                    dateGreaterThan: $('#start_date'),
                 },
                 estimated_hours: {
                     required: true,
@@ -440,6 +474,12 @@
                 desc: {
                     minlength: {{MIN_LENGTH_10}},
                     maxlength: {{MAX_LENGTH_2000}}
+                },
+                "attachments[]": {
+                    required: false,
+                    allowedFiles: true,
+                    maxFileCount: 10,
+                    maxFileSize: 5 * 1024 * 1024 // 5MB limit per file
                 },
                 task_tags_hid: {
                     required: true
@@ -455,7 +495,7 @@
                     minlength: {{MIN_LENGTH}},
                     maxlength: {{MAX_LENGTH}}
                 },
-                'assign_to[]': {
+                "assign_to[]": {
                     required: true
                 },
             },
@@ -494,5 +534,30 @@
                 },
             }
         });
+
+        $('#assignees_search').on('input', function () {
+            var query = $(this).val().toLowerCase().trim();
+
+            // Target all assignee column cards
+            $('#assign_to_container .col-md-6').each(function () {
+                var nameText = $(this).find('.fw-medium').text().toLowerCase();
+
+                // Toggle visibility based on matching name text
+                $(this).toggle(nameText.indexOf(query) !== -1);
+            });
+        });
+
+        $.validator.addMethod("dateGreaterThan", function (value, element, param) {
+            // $(param) targets the start date element
+            var startDate = $(param).val();
+
+            // If either field is empty, let 'required' rule handle it
+            if (!value || !startDate) {
+                return true;
+            }
+
+            // Compare date strings/timestamps directly
+            return new Date(value) >= new Date(startDate);
+        }, "Due date cannot be earlier than the start date.");
     });
 </script>

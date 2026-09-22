@@ -83,12 +83,10 @@ class ProjectTaskController extends Controller {
             ->groupBy('project_tasks.prt_id');
         if (!is_admin()) {
             $loggedInEmpId = get_logged_in_user_emp_id();
+            $team_members = get_employee_children_in_depth((int)$loggedInEmpId, true, config('constants.DEFAULT_DEPTH'));
 
-            $projectTaskQuery->whereHas('projectTaskAssignments', function ($query) use ($loggedInEmpId) {
-                $query->where(function ($q) use ($loggedInEmpId) {
-                    $q->where('pta_assign_by', $loggedInEmpId)
-                        ->orWhere('pta_assign_to', $loggedInEmpId);
-                });
+            $projectTaskQuery->whereHas('projectTaskAssignments', function ($query) use ($team_members) {
+                $query->whereIn('pta_assign_to', $team_members);
             });
         }
         $project_tasks = $projectTaskQuery->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
