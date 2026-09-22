@@ -15,7 +15,7 @@
             border-radius: 10px !important;
         }
     </style>
-    @if(!empty($all_projects))
+    @if(!empty($all_projects) && count($all_projects)>0)
         <div class="row">
             @foreach($all_projects as $project)
                 @php
@@ -93,7 +93,11 @@
             @endforeach
         </div>
     @else
-        {!! generate_no_record_html() !!}
+        <div class="card">
+            <div class="card-body p-0">
+                {!! generate_no_record_html() !!}
+            </div>
+        </div>
     @endif
     @if(!empty($all_projects) && count($all_projects) > 0)
         {{--<div class="card-footer">
