@@ -115,4 +115,6 @@ Route::post('/employee/panel-status', function (Request $request) {
         'active' => $request->boolean('active')
     ]);
 
+// NEw Chnages
+//    Another Changes
 })->middleware('auth');
