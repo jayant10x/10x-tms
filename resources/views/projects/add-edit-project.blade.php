@@ -79,6 +79,7 @@
 @push('script')
     <script>
         let called_from = 'add_project';
+        let pro_id = null;
     </script>
     @vite(['resources/js/pages/projects.js' ])
 @endpush

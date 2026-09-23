@@ -1,21 +1,51 @@
 @extends('layouts.vertical', ['title' => 'View Project','subTitle' => 'View Project'])
 @section('css')
-    @vite('resources/css/project.css')
+    @vite(['resources/css/project.css','node_modules/choices.js/public/assets/styles/choices.min.css'])
 @endsection
 @section('content')
+    @php
+        $all_permission = (get_logged_in_user_role() == \App\Enums\UserRoleEnum::MANAGER->value && permission_can('all_tasks', 'edit')) || is_admin();
+        $employee_permission = get_logged_in_user_role() == \App\Enums\UserRoleEnum::EMPLOYEE->value && permission_can('all_my_tasks', 'edit');
+    @endphp
     <div>
-        <div class="row">
-            <div class="col-md-1">
-                <div class="bg-primary project-first-char-count align-content-center">
-                    {{get_initials_char($project_data['pro_name'], 1)}}
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-1">
+                        <div class="bg-primary project-first-char-count align-content-center">
+                            {{get_initials_char($project_data['pro_name'], 1)}}
+                        </div>
+                    </div>
+                    <div class="col-md-11 align-content-center">
+                        <span class="fw-bold fs-4">{{$project_data['pro_name']}}</span><br>
+                        @if(!empty($project_data['pro_description']))
+                            <span
+                                class="text-break">{{generate_shorten_string($project_data['pro_description'], 140)}}</span>
+                        @endif
+                    </div>
                 </div>
             </div>
-            <div class="col-md-11 align-content-center">
-                <span class="fw-bold fs-4">{{$project_data['pro_name']}}</span><br>
-                @if(!empty($project_data['pro_description']))
-                    <span class="text-break">{{generate_shorten_string($project_data['pro_description'], 140)}}</span>
-                @endif
-            </div>
+            @if($all_permission)
+                <div class="col-md-4">
+                    <div class="row justify-content-end">
+                        <div class="col-md-8">
+                            <select class="form-control rounded-4" name="project_status" id="project_status_toggle"
+                                    data-choices data-choices-sorting-false>
+                                <option value="">select status</option>
+                                <optgroup label="">
+                                    @foreach(\App\Enums\ProjectStatus::cases() as $status)
+                                        <option
+                                            value="{{ $status->value }}"
+                                            @selected(old('project_status', $project_data['pro_status']?->value ?? $project_data['pro_status'] ?? null) === $status->value)>
+                                            {{ $status->label()}}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
         <div class="row mt-4">
             <div class="col-md-3">
@@ -157,7 +187,9 @@
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <div class="row justify-content-between mb-1">
-                                    <div class="col-md-4 fs-12 text-dark"><span id="task-completed"></span> / <span id="task-total"></span> Tasks</div>
+                                    <div class="col-md-4 fs-12 text-dark"><span id="task-completed"></span> / <span
+                                            id="task-total"></span> Tasks
+                                    </div>
                                     <div class="col-md-2 fs-12 text-primary fw-bold" id="task-percentage"></div>
                                 </div>
                                 <div class="row">
@@ -182,7 +214,8 @@
                                 <span class="mt-2">
                                     <iconify-icon icon="solar:calendar-broken"></iconify-icon>
                                 </span>
-                                <span class="fs-6 fw-medium">{{get_date_time_format($project_data['pro_deadline'])}}</span>
+                                <span
+                                    class="fs-6 fw-medium">{{get_date_time_format($project_data['pro_deadline'])}}</span>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -220,6 +253,7 @@
         let called_from = 'view_project';
         let total = {{count($project_tasks) ?? 0}};
         let completed = {{$task_statistics['completed_tasks']}};
+        let pro_id = '{{my_encrypt($pro_id)}}';
     </script>
     @vite(['resources/js/pages/projects.js' ])
 @endpush

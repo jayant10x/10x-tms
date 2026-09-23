@@ -163,7 +163,7 @@ $permission_arr = [
             ...$main_permission_arr['projects'],
             'permissions' => [
                 'add' => true,
-                'edit' => false,
+                'edit' => true,
                 'view' => true,
                 'delete' => false,
             ],

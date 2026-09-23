@@ -77,4 +77,37 @@ if (called_from != 'view_project') {
 
         updateTaskProgress();
     });
+
+    $(document).on('change', '#project_status_toggle', function () {
+        if ($(this).val() !== '') {
+            $.ajax({
+                url: '/update-project-status/' + pro_id,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    status: $(this).val(),
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+
+                success: function (response) {
+                    if (!response.status) {
+                        showNotification(response.message, 'error');
+                        return;
+                    }
+                    showNotification(response.message, 'success');
+                },
+
+                error: function (xhr) {
+                    let message = 'Unable to change task status.';
+                    if (xhr.responseJSON?.message) {
+                        message = xhr.responseJSON.message;
+                    }
+                    showNotification(message, 'error');
+                }
+            });
+        } else {
+            let message = 'Status is required.';
+            showNotification(message, 'error');
+        }
+    });
 }

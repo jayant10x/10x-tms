@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DepartmentsEnum;
+use App\Enums\ProjectStatus;
 use App\Models\Employee;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
-class AjaxController extends Controller {
+class AjaxController extends Controller
+{
 
-    public function getSubDepartments(Request $request, $department) {
+    public function getSubDepartments(Request $request, $department)
+    {
         $department = DepartmentsEnum::from($department);
 
         $data = collect(
@@ -25,7 +28,8 @@ class AjaxController extends Controller {
         ]);
     }
 
-    public function getReportingToEmployees(Request $request) {
+    public function getReportingToEmployees(Request $request)
+    {
         $department = $request->department;
         $sub_department = $request->sub_department;
         $emp_id = $request->emp_id;
@@ -61,7 +65,8 @@ class AjaxController extends Controller {
         ]);
     }
 
-    public function getAddEditPopUpForms(Request $request) {
+    public function getAddEditPopUpForms(Request $request)
+    {
         $section = my_decrypt($request->section, true);
         $mode = my_decrypt($request->mode, true);
         $primary_id = isset($request->primary_id) ? my_decrypt($request->primary_id) : null;
@@ -88,7 +93,8 @@ class AjaxController extends Controller {
         ]);
     }
 
-    public function getViewPopUpsPage(Request $request) {
+    public function getViewPopUpsPage(Request $request)
+    {
         $section = my_decrypt($request->section, true);
         $mode = my_decrypt($request->mode, true);
         $primary_id = my_decrypt($request->primary_id);
@@ -110,10 +116,11 @@ class AjaxController extends Controller {
         ]);
     }
 
-    private function getCreateTaskFormViaAjax($mode) {
+    private function getCreateTaskFormViaAjax($mode)
+    {
         if ($mode == 'add') {
             $team_members = get_employee_children_in_depth((int)get_logged_in_user_emp_id());
-            $projects = Project::query()->select('pro_id', 'pro_name')->get()->pluck('pro_name', 'pro_id')->toArray();
+            $projects = Project::query()->select('pro_id', 'pro_name')->where('pro_status', '=', ProjectStatus::ACTIVE->value)->get()->pluck('pro_name', 'pro_id')->toArray();
             $data = view('project-task.add-project-task', compact('team_members', 'projects'))->render();
         } else {
             $data = '';
@@ -121,15 +128,18 @@ class AjaxController extends Controller {
         return ['data' => $data, 'secondary_data' => 'Create Task'];
     }
 
-    private function getAnotherCreateTaskFormViaAjax($mode, $primary_id) {
+    private function getAnotherCreateTaskFormViaAjax($mode, $primary_id)
+    {
         return ['data' => '<h1>Another Hello Comes from Ajax Controller.</h1>', 'secondary_data' => 'Another Create Task'];
     }
 
-    private function getTaskViewViaAjax($mode, $primary_id) {
+    private function getTaskViewViaAjax($mode, $primary_id)
+    {
         return ['data' => '<h1>Task View Comes from Ajax Controller.</h1>', 'secondary_data' => 'View Task'];
     }
 
-    public function checkUniqueEmpInternalId(Request $request) {
+    public function checkUniqueEmpInternalId(Request $request)
+    {
         $mode = my_decrypt($request->mode, true);
         $isExistQuery = Employee::query()->where('emp_internal_id', '=', $request->internal_id);
         if ($mode == 'edit') {
@@ -139,7 +149,8 @@ class AjaxController extends Controller {
         return response()->json(!$isExist);
     }
 
-    public function checkUniqueEmpEmail(Request $request) {
+    public function checkUniqueEmpEmail(Request $request)
+    {
         $mode = my_decrypt($request->mode, true);
         $isExistQuery = Employee::query()->where('emp_email', '=', $request->email_id);
         if ($mode == 'edit') {
