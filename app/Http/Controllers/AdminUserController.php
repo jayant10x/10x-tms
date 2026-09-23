@@ -118,21 +118,24 @@ class AdminUserController extends Controller {
     }
 
     public function updateAdmin(Request $request, $adm_id) {
+        $adm_id = my_decrypt($adm_id);
         $request->validate([
             'admin_name' => 'required|min:' . MIN_LENGTH . '|max:' . MAX_LENGTH_100,
             'user_name' => 'required|min:6|max:' . MAX_LENGTH_20,
             'password' => 'nullable|min:8|max:' . MAX_LENGTH_20,
-            'status' => 'required',
-            'admin_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'status' => $adm_id != get_logged_in_user_id() ? 'required' : 'nullable',
+            'admin_photo' => 'nullable|file|mimes:jpeg,jpg,png|max:2048',
         ]);
 
         $current_date = date(config('constants.DB_DATE_TIME_FORMAT'));
 
-        $admin_exist = AdminUser::query()->where('adm_id', my_decrypt($adm_id))->first();
+        $admin_exist = AdminUser::query()->where('adm_id', $adm_id)->first();
         if ($admin_exist) {
             $admin_exist->adm_name = $request->admin_name;
             $admin_exist->adm_user_name = $request->user_name;
-            $admin_exist->adm_status = $request->status;
+            if ($adm_id != get_logged_in_user_id())
+                $admin_exist->adm_status = $request->status;
+
             if (!empty($request->password)) {
                 $admin_exist->adm_password = $request->password;
             }

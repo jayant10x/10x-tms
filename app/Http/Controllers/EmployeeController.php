@@ -141,6 +141,10 @@ class EmployeeController extends Controller {
                 $employee->emp_updated_by = setCreatedUpdatedBy();
                 $employee->emp_updated_on = $current_date;
 
+
+                /**
+                 * Todo: whatever get edited here as per the admin columns data get updated on the admin_users table also
+                 */
                 /*
                  * Employee photo
                  */
