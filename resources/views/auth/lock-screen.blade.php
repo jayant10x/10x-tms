@@ -16,7 +16,7 @@
             </div>
 
             <div class="text-center mb-2">
-                <img class="rounded-circle avatar-lg img-thumbnail" src="/images/users/avatar-1.jpg" alt="avatar">
+                <img class="rounded-circle avatar-lg img-thumbnail object-fit-cover" src="/images/users/avatar-1.jpg" alt="avatar">
             </div>
             <h2 class="fw-bold text-uppercase text-center fs-18">Hi ! Gaston</h2>
             <p class="text-muted text-center mt-1 mb-4">Enter your password to access the admin.</p>

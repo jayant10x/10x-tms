@@ -78,7 +78,7 @@ class AdminUserController extends Controller {
             'user_name' => 'required|min:6|max:' . MAX_LENGTH_20,
             'password' => 'required|min:8|max:' . MAX_LENGTH_20,
             'status' => 'required',
-            'admin_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'admin_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:5120',
         ]);
 
         $current_date = date(config('constants.DB_DATE_TIME_FORMAT'));
@@ -123,7 +123,7 @@ class AdminUserController extends Controller {
             'user_name' => 'required|min:6|max:' . MAX_LENGTH_20,
             'password' => 'nullable|min:8|max:' . MAX_LENGTH_20,
             'status' => 'required',
-            'admin_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'admin_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:5120',
         ]);
 
         $current_date = date(config('constants.DB_DATE_TIME_FORMAT'));

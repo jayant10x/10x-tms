@@ -152,6 +152,7 @@
                 styleButtonProcessItemPosition: 'right bottom',
                 storeAsFile: true,
                 allowReplace: true,
+                maxFileSize: '5MB',
 
                 @if(!empty($admin_data))
                 files: existingPhoto
