@@ -104,7 +104,7 @@ class ProjectController extends Controller
             $project->pro_created_on = date(config('constants.DB_DATE_TIME_FORMAT'));
 
             if ($project->save()) {
-                ProjectWithTaskActivityLog::init()
+                /*ProjectWithTaskActivityLog::init()
                     ->project($project->pro_id)
                     ->slug('project.created')
                     ->data([
@@ -112,7 +112,7 @@ class ProjectController extends Controller
                         'user' => get_employee_data($loggedInUser)['emp_full_name'],
                     ])
                     ->performedBy($loggedInUser)
-                    ->log();
+                    ->log();*/
 
                 DB::commit();
                 return redirect()->route('projects.list')->with('success', 'Project added successfully.');
@@ -141,7 +141,7 @@ class ProjectController extends Controller
             if (!$is_updated) {
                 return response()->json(['status' => false, 'message' => 'Project status not updated.',], 500);
             }
-            ProjectWithTaskActivityLog::init()
+            /*ProjectWithTaskActivityLog::init()
                 ->project($pro_id)
                 ->slug('project.status.updated')
                 ->data([
@@ -150,7 +150,7 @@ class ProjectController extends Controller
                     'user' => get_employee_data($loggedInUser)['emp_full_name'],
                 ])
                 ->performedBy($loggedInUser)
-                ->log();
+                ->log();*/
             return response()->json(['status' => true, 'message' => 'Project status updated successfully.'], 200);
         } else {
             return response()->json(['status' => false, 'message' => 'Project not found.',], 404);
