@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class ProjectTaskController extends Controller {
 
-    public function allTasks(Request $request) {
+    public function allTasks() {
         $prefix = config('constants.TABLE_PREFIX');
 
         $projectTaskQuery = ProjectTask::query()

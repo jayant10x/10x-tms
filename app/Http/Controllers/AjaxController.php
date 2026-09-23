@@ -6,6 +6,7 @@ use App\Enums\DepartmentsEnum;
 use App\Enums\ProjectStatus;
 use App\Models\Employee;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class AjaxController extends Controller
@@ -37,13 +38,19 @@ class AjaxController extends Controller
         $reporting = [];
 
         if (!empty($department) || !empty($sub_department)) {
-            $reportingQuery = Employee::query();
-            if (!empty($department)) {
-                $reportingQuery->where('emp_department', $department);
-            }
+            $reportingQuery = Employee::query()->where(function (Builder $query) use ($department, $sub_department) {
+                $query->where('emp_designation', 'manager');
+                $query->orWhere('emp_designation', 'tl');
+            });
 
-            if (!empty($sub_department)) {
-                $reportingQuery->where('emp_sub_department', $sub_department);
+            if (!empty($department)) {
+                $reportingQuery->where('emp_department', $department)
+                    ->where(function (Builder $query) use ($sub_department) {
+                        $query->whereNull('emp_sub_department');
+                        if (!empty($sub_department)) {
+                            $query->orWhere('emp_sub_department', $sub_department);
+                        }
+                    });
             }
 
             if (!empty($emp_id)) {
