@@ -42,7 +42,7 @@
                                                 class="mt-0 fs-12">{{!empty($project->pro_manager) ? get_employee_data($project->pro_manager)['emp_full_name'] : '-'}}</span>
                                         </div>
                                         <div
-                                            class="col-md-3 align-content-center">{!! \App\Enums\ProjectStatus::tryFrom($project->pro_status)->badge() !!}</div>
+                                            class="col-md-3 align-content-center">{!! $project->pro_status->badge() !!}</div>
                                     </div>
                                     @if(!empty($project->pro_description))
                                         <div class="row">
