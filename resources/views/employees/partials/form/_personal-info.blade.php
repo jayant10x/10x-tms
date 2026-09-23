@@ -36,7 +36,8 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label for="phone_number" class="form-label">Phone Number</label>
+                        <label for="phone_number" class="form-label">Phone Number <span
+                                class="text-danger">*</span></label>
                         <input type="text" name="phone_number" id="phone_number"
                                class="form-control @error('phone_number') is-invalid @enderror"
                                autocomplete="off"
@@ -125,7 +126,7 @@
                         <label for="sub_department" class="form-label">Sub Department{{-- <span
                                                     class="text-danger">*</span>--}}</label>
                         <select id="sub_department" name="sub_department"
-                                class="form-control @error('reporting_to') is-invalid @enderror">
+                                class="form-control @error('sub_department') is-invalid @enderror">
                             <option value="">Select Sub Department</option>
                         </select>
                         @error('sub_department')

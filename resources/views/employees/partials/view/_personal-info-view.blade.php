@@ -54,12 +54,12 @@
                 <img
                     src="{{ asset('storage/employees/' . $emp_data->emp_photo) }}"
                     alt="Employee Photo"
-                    class="rounded-circle avatar-xl img-thumbnail"
+                    class="rounded-circle avatar-xl img-thumbnail object-fit-cover"
                 >
             </a>
         @else
             <img src="{{ asset('images/users/dummy-avatar.jpg') }}"
-                 class="rounded-circle avatar-xl img-thumbnail">
+                 class="rounded-circle avatar-xl img-thumbnail object-fit-cover">
         @endif
         <div>
             <h3 class="fw-semibold mb-1 mt-1">{{$emp_data->emp_full_name}}</h3>

@@ -34,11 +34,11 @@
                                                    rel="noopener noreferrer">
                                                     <img
                                                         src="{{asset('storage/employees/'.$employee->emp_photo)}}"
-                                                        class="avatar-sm rounded-circle">
+                                                        class="avatar-sm rounded-circle object-fit-cover">
                                                 </a>
                                             @else
                                                 <img src="{{asset('images/users/dummy-avatar.jpg')}}"
-                                                     class="avatar-sm rounded-circle">
+                                                     class="avatar-sm rounded-circle object-fit-cover ">
                                             @endif
                                         </div>
                                         <div class="text-dark fw-medium">

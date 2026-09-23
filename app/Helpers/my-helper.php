@@ -78,17 +78,24 @@ function generate_no_record_html($message = '', $class = ''): string {
 
 function generate_created_updated_label($created_updated_data): string {
     $updated_by_on = '-';
+    $exploded_array = explode('~#~', $created_updated_data['created_by']);
+    $username = str_replace('_', ' ', $exploded_array[0]);
 
+    $ip_address = $exploded_array[2];
     if (!empty($created_updated_data['updated_by'])) {
-        $updated_by_on = $created_updated_data['updated_by'] . '<br>' . $created_updated_data['updated_on'];
+        $updating_exploded_array = explode('~#~', $created_updated_data['updated_by']);
+        $updating_username = str_replace('_', ' ', $updating_exploded_array[0]);
+        $updating_ip_address = $updating_exploded_array[2];
+        $updated_by_on = $updating_username . ' ' . date('d-m-Y H:i', strtotime($created_updated_data["updated_on"])) . ' | ' . $updating_ip_address;
     }
     return '<div class="created_updated_main_div">
                 <div class="row p-2">
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-3 created_updated_label align-content-center">Created By: </div>
-                            <div class="col-md-9 created_updated">' . $created_updated_data["created_by"] . '<br>
-                                <span>' . $created_updated_data["created_on"] . '</span>
+                            <div class="col-md-9 created_updated">' . $username . '
+                                <span>' . date('d-m-Y H:i', strtotime($created_updated_data["created_on"])) . '</span>
+                                <span>| ' . $ip_address . '</span>
                             </div>
                         </div>
                     </div>

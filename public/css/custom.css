@@ -151,3 +151,9 @@ label.error {
     margin-top: 5px;
     display: block; /* Forces the error to sit neatly under the input */
 }
+
+.form-control.error,
+.choices__inner:has(.error),
+.flatpickr-input.error+.form-control.input {
+    border-color: red !important;
+}
