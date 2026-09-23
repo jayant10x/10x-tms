@@ -175,7 +175,7 @@ $(document).ready(function () {
             }
         });
 
-        get_employee_reporting_to(departmentId, '');
+        // get_employee_reporting_to(departmentId, '');
     });
 
     $('#sub_department').on('change', function () {
