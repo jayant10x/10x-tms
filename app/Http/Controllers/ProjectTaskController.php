@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ProjectStatus;
 use App\Enums\TaskStatus;
 use App\Models\ProjectTask;
 use App\Models\ProjectTaskAssignment;
@@ -23,12 +24,16 @@ class ProjectTaskController extends Controller {
         if (!is_admin()) {
             $loggedInEmpId = get_logged_in_user_emp_id();
 
-            $projectTaskQuery->whereHas('projectTaskAssignments', function ($query) use ($loggedInEmpId) {
-                $query->where(function ($q) use ($loggedInEmpId) {
-                    $q->where('pta_assign_by', $loggedInEmpId)
-                        ->orWhere('pta_assign_to', $loggedInEmpId);
+            $projectTaskQuery
+                ->whereHas('project', function ($query) {
+                    $query->where('pro_status', '=', ProjectStatus::ACTIVE->value);
+                })
+                ->whereHas('projectTaskAssignments', function ($query) use ($loggedInEmpId) {
+                    $query->where(function ($q) use ($loggedInEmpId) {
+                        $q->where('pta_assign_by', $loggedInEmpId)
+                            ->orWhere('pta_assign_to', $loggedInEmpId);
+                    });
                 });
-            });
         }
         $project_tasks = $projectTaskQuery->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
         return view('project-task.all-tasks', compact('project_tasks'));
@@ -44,6 +49,9 @@ class ProjectTaskController extends Controller {
                 ->with('project')
                 ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
                 ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_by')
+                ->whereHas('project', function ($query) {
+                    $query->where('pro_status', '=', ProjectStatus::ACTIVE->value);
+                })
                 ->where('pta_assign_to', $loggedInEmpId)->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
         }
         return view('project-task.all-my-tasks', compact('all_assigned_to_me'));
@@ -62,6 +70,9 @@ class ProjectTaskController extends Controller {
                 ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_to')
                 ->select('project_tasks.*', DB::raw('GROUP_CONCAT(DISTINCT ' . $prefix . 'employees.emp_full_name ORDER BY ' . $prefix . 'employees.emp_full_name SEPARATOR ", ") as assignees'))
                 ->groupBy('project_tasks.prt_id')
+                ->whereHas('project', function ($query) {
+                    $query->where('pro_status', '=', ProjectStatus::ACTIVE->value);
+                })
                 ->whereHas('projectTaskAssignments', function ($query) use ($loggedInEmpId) {
                     $query->where(function ($q) use ($loggedInEmpId) {
                         $q->where('pta_assign_by', $loggedInEmpId);
@@ -85,9 +96,13 @@ class ProjectTaskController extends Controller {
             $loggedInEmpId = get_logged_in_user_emp_id();
             $team_members = get_employee_children_in_depth((int)$loggedInEmpId, true, config('constants.DEFAULT_DEPTH'));
 
-            $projectTaskQuery->whereHas('projectTaskAssignments', function ($query) use ($team_members) {
-                $query->whereIn('pta_assign_to', $team_members);
-            });
+            $projectTaskQuery
+                ->whereHas('project', function ($query) {
+                    $query->where('pro_status', '=', ProjectStatus::ACTIVE->value);
+                })
+                ->whereHas('projectTaskAssignments', function ($query) use ($team_members) {
+                    $query->whereIn('pta_assign_to', $team_members);
+                });
         }
         $project_tasks = $projectTaskQuery->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();
 
@@ -107,6 +122,9 @@ class ProjectTaskController extends Controller {
                 ->with('project')
                 ->join('project_task_assignments', 'project_tasks.prt_id', '=', 'project_task_assignments.pta_prt_id')
                 ->join('employees', 'employees.emp_id', '=', 'project_task_assignments.pta_assign_by')
+                ->whereHas('project', function ($query) {
+                    $query->where('pro_status', '=', ProjectStatus::ACTIVE->value);
+                })
                 ->where('pta_assign_to', $loggedInEmpId);
 
             $my_tasks = (clone $baseQuery)->paginate(config('constants.PER_PAGE_ITEM_COUNT'))->withQueryString();

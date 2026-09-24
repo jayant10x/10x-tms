@@ -70,7 +70,7 @@
                                         </div>
                                     </div>
                                     <div class="row justify-content-around mt-2">
-                                        <div class="col-md-8">
+                                        <div class="col-md-7">
                                             <div class="text-primary fw-bold fs-5">
                                                 @for($start = 0; $start < count($project_task_assignees); $start++)
                                                     <span class="assignee-char">
@@ -79,9 +79,9 @@
                                                 @endfor
                                             </div>
                                         </div>
-                                        <div class="col-md-4 fs-12">
+                                        <div class="col-md-5 fs-12 text-end">
                                             <iconify-icon icon="solar:calendar-bold"
-                                                          class="align-middle fs-12"></iconify-icon> {{get_date_time_format($project->pro_deadline)}}
+                                                          class="align-middle"></iconify-icon> {{get_date_time_format($project->pro_deadline)}}
                                         </div>
                                     </div>
                                 </div>

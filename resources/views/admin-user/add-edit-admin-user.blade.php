@@ -52,7 +52,7 @@
                                             class="text-danger">*</span></label>
                                     <select class="form-control @error('status') is-invalid @enderror"
                                             id="status" data-choices data-choices-sorting-false
-                                            data-placeholder="Select Status" name="status">
+                                            data-placeholder="Select Status" name="status" @if(!empty($admin_data) && get_logged_in_user_id() == $admin_data->adm_id) disabled @endif>
 
                                         <option value="" @selected(old('status', $admin_data->adm_status ?? '') == '')>
                                             Select Status
@@ -198,7 +198,13 @@
                         maxlength: 20,
                     },
                     status: {
-                        required: true,
+                        required: function () {
+                            @if(!empty($admin_data) && get_logged_in_user_id() != $admin_data->adm_id)
+                                return true;
+                            @else
+                                return false;
+                            @endif
+                        },
                     },
                     password: {
                         required: function () {

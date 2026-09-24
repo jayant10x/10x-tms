@@ -157,3 +157,8 @@ label.error {
 .flatpickr-input.error+.form-control.input {
     border-color: red !important;
 }
+
+.choices.is-disabled .choices__item {
+    cursor: not-allowed;
+    color: #5d7186;
+}
