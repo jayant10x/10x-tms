@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         styleButtonProcessItemPosition: 'right bottom',
         storeAsFile: true,
         allowReplace: true,
+        maxFileSize: '5MB',
 
         files: existingPhoto
             ? [

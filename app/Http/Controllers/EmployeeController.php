@@ -35,7 +35,7 @@ class EmployeeController extends Controller {
             'reporting_to' => 'nullable',
             'joining_date' => 'required|date',
             'status' => 'required',
-            'employee_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'employee_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:5120',
         ]);
 
         $current_date = date(config('constants.DB_DATE_TIME_FORMAT'));
@@ -119,7 +119,7 @@ class EmployeeController extends Controller {
             'reporting_to' => 'nullable',
             'joining_date' => 'required|date',
             'status' => 'required',
-            'employee_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'employee_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:5120',
         ]);
 
         try {

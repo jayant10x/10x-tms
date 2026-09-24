@@ -31,7 +31,9 @@
                                         @if(!empty($member_info['emp_photo']))
                                     </a>
                                 @endif
+                                @isset($member_info['admin_user_details'])
                                     {!! user_online_status_dot($member_info['admin_user_details']['adm_id']) !!}
+                                @endisset
                             </div>
                         </div>
                         <div class="col-md-10 align-content-center">
@@ -50,10 +52,12 @@
                     </div>
                 </div>
                 <div class="col-md-2 text-end align-content-center">
-                    <div class="mb-2">
-                        {!! \App\Enums\UserRoleEnum::tryFrom($member_info['admin_user_details']['adm_role'])->badge() !!}
-                    </div>
-                    {!! user_online_status_badge($member_info['admin_user_details']['adm_id']) !!}
+                    @isset($member_info['admin_user_details'])
+                        <div class="mb-2">
+                            {!! \App\Enums\UserRoleEnum::tryFrom($member_info['admin_user_details']['adm_role'])->badge() !!}
+                        </div>
+                        {!! user_online_status_badge($member_info['admin_user_details']['adm_id']) !!}
+                    @endisset
                 </div>
             </div>
         </div>

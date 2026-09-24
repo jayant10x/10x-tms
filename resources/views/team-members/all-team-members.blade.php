@@ -32,7 +32,9 @@
                                             <img src="{{$emp_photo}}"
                                                  class="avatar-lg rounded-3 border border-light border-3"
                                                  style="height: 80px; width: 80px; object-fit: cover;">
-                                            {!! user_online_status_dot($member_val->admin_user_details->adm_id, 'bottom: 0px; right: -3px;') !!}
+                                            @isset($member_val->admin_user_details)
+                                                {!! user_online_status_dot($member_val->admin_user_details->adm_id, 'bottom: 0px; right: -3px;') !!}
+                                            @endisset
                                         </div>
                                         <div class="d-block">
                                             <p class="text-dark fw-medium fs-16 mb-0">{{$member_val->emp_full_name}}</p>

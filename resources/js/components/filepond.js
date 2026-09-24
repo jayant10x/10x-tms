@@ -35,12 +35,12 @@ async function getFilePond() {
 }
 
 export async function initFilePond(element, options = {}) {
-    const { create } = await getFilePond();
+    const {create} = await getFilePond();
 
     const pond = create(element, {
         allowMultiple: false,
         storeAsFile: true,
-        acceptedFileTypes: ['image/jpeg', 'image/png'],
+        acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg'],
         maxFileSize: '2MB',
 
         // Settings to enable file replacement without allowing removal

@@ -180,7 +180,7 @@
                                 }
                             @endphp
                             <span class="d-flex align-items-center">
-                                   <img class="rounded-circle" width="32" height="32" src="{{$profile_pic}}">
+                                   <img class="rounded-circle object-fit-cover" width="32" height="32" src="{{$profile_pic}}">
                                  {!! user_online_status_dot(Auth::user()->adm_id, 'width: 10px !important; height: 10px !important; bottom: 7px; right: 7px;') !!}
                               </span>
                         </a>
