@@ -56,7 +56,7 @@
                                     <div class="d-flex gap-2">
                                         {!! generate_view_button(route('employees.view', ['emp_id' => my_encrypt($employee->emp_id)])) !!}
                                         {!! generate_edit_button(route('employees.edit', ['emp_id' => my_encrypt($employee->emp_id)])) !!}
-                                        {!! generate_delete_button(route('employees.list')) !!}
+{{--                                        {!! generate_delete_button(route('employees.list')) !!}--}}
                                     </div>
                                 </td>
                             </tr>
